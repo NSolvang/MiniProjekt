@@ -1,0 +1,24 @@
+@page "/Marked"
+@using Core
+@inject NavigationManager navMan
+
+
+<h3>Marked</h3>
+
+<button class="btn-primary" @onclick="NavigateToMineAnnoncer">Mine Annoncer</button>
+<button class="btn-primary" @onclick="NavigateToMineBuys">Mine køb</button>
+
+@code {
+    
+    
+    
+    private void NavigateToMineAnnoncer()
+    {
+        navMan.NavigateTo("mineannoncer");
+    }
+    
+    private void NavigateToMineBuys()
+    {
+        navMan.NavigateTo("minebuys");
+    }
+}
