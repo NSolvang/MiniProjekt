@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniProjekt", "MiniProjekt\MiniProjekt.csproj", "{BB7BB937-1AC6-46E9-9508-A639CFBE3EE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{46717FF6-4CBB-4E33-B4B8-F21711A9E055}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerAPI", "ServerAPI\ServerAPI.csproj", "{E3A41402-2282-4962-92F4-1CEA78C30A53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{BB7BB937-1AC6-46E9-9508-A639CFBE3EE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB7BB937-1AC6-46E9-9508-A639CFBE3EE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB7BB937-1AC6-46E9-9508-A639CFBE3EE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46717FF6-4CBB-4E33-B4B8-F21711A9E055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46717FF6-4CBB-4E33-B4B8-F21711A9E055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46717FF6-4CBB-4E33-B4B8-F21711A9E055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46717FF6-4CBB-4E33-B4B8-F21711A9E055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3A41402-2282-4962-92F4-1CEA78C30A53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3A41402-2282-4962-92F4-1CEA78C30A53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3A41402-2282-4962-92F4-1CEA78C30A53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3A41402-2282-4962-92F4-1CEA78C30A53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
