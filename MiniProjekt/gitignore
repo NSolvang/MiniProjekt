@@ -1,0 +1,29 @@
+# Build artifacts
+bin/
+obj/
+
+# Rider/JetBrains project files
+.idea/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET dev certs
+*.pfx
+*.p12
+
+# Log files
+*.log
+
+# VS Code if relevant
+.vscode/
+
+# Node/npm (fx Tailwind eller bundling)
+node_modules/
+
+# Environment secrets
+secrets.json
+.env
