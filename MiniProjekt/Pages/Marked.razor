@@ -1,6 +1,8 @@
 @page "/Marked"
 @using Core
+@using MiniProjekt.Service
 @inject NavigationManager navMan
+@inject ILoginService loginService
 
 
 <h3>Marked</h3>
@@ -21,4 +23,12 @@
     {
         navMan.NavigateTo("minebuys");
     }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var loggedIn = await loginService.GetUserLoggedIn();
+        if (loggedIn is null)
+            navMan.NavigateTo("/LoginPage/Marked");
+    }
+
 }

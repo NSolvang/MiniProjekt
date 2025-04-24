@@ -1,0 +1,89 @@
+@page "/LoginPage/{target:alpha}"
+@using MiniProjekt.Service
+@inject NavigationManager navManger
+@inject ILoginService loginService
+
+<link href="css/Login.css" rel="stylesheet" />
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Welcome Back</h2>
+            <p>Please enter your credentials to login</p>
+        </div>
+
+        <div class="form-group">
+            <label>Username</label>
+            <div class="input-with-icon">
+                <i class="fas fa-user"></i>
+                <InputText class="form-control" @bind-Value="username" placeholder="Enter your username" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <div class="input-with-icon">
+                <i class="fas fa-lock"></i>
+                <InputText class="form-control" type="password" @bind-Value="password" placeholder="••••••••" />
+            </div>
+        </div>
+
+        <div class="form-options">
+            <label class="remember-me">
+                <input type="checkbox" /> Remember me
+            </label>
+            <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
+
+        <button class="login-button" @onclick="OnClickLogin">
+            Login <i class="fas fa-arrow-right"></i>
+        </button>
+
+        @if (showError)
+        {
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i> @errorText
+            </div>
+        }
+
+        <div class="signup-link">
+            Don't have an account? <a href="Sign">Sign up</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    string username = "";
+    string password = "";
+    string errorText = "";
+    bool showError = false;
+    
+    [Parameter]
+    public string target { get; set; }   
+
+    private async Task OnClickLogin()
+    {
+        // Reset error state
+        showError = false;
+        
+        // Validate empty fields
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            errorText = "Please enter both username and password";
+            showError = true;
+            return;
+        }
+
+        var success = await loginService.Login(username, password);
+
+        if (!success)
+        {
+            errorText = "Invalid username or password";
+            showError = true;
+        }
+        else
+        {
+            navManger.NavigateTo("Marked");
+        }
+    }
+}

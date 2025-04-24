@@ -1,0 +1,117 @@
+@page "/Sign"
+@using MiniProjekt.Service
+@inject NavigationManager navManager
+@inject ILoginService loginService
+
+
+<div class="signup-container">
+    <div class="signup-card">
+        <div class="signup-header">
+            <h1>Create Account</h1>
+            <p>Choose your username and password</p>
+        </div>
+
+        <div class="form-group">
+            <label>Username</label>
+            <div class="input-with-icon">
+                <i class="fas fa-user"></i>
+                <InputText class="form-control" @bind-Value="username" placeholder="Choose a username" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <div class="input-with-icon">
+                <i class="fas fa-lock"></i>
+                <InputText class="form-control" type="password" @bind-Value="password" 
+                            placeholder="••••••••" />
+            </div>
+            <div class="password-hint">
+                Password must be at least 8 characters
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Confirm Password</label>
+            <div class="input-with-icon">
+                <i class="fas fa-lock"></i>
+                <InputText class="form-control" type="password" @bind-Value="confirmPassword" 
+                            placeholder="••••••••" />
+            </div>
+        </div>
+
+        <button class="Create" @onclick="OnClickSignUp" type="button">
+            Create Account
+        </button>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i> @errorMessage
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="success-message">
+                <i class="fas fa-check-circle"></i> @successMessage
+            </div>
+        }
+
+        <div class="signup-link">
+            Already have an account? <a href="/LoginPage/home">Login</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string username = "";
+    private string password = "";
+    private string confirmPassword = "";
+    private string errorMessage = "";
+    private string successMessage = "";
+
+    private async Task OnClickSignUp()
+    {
+        errorMessage = "";
+        successMessage = "";
+
+
+        if (string.IsNullOrWhiteSpace(username)) 
+        {
+            errorMessage = "Please choose a username";
+            return;
+        }
+        
+        if (string.IsNullOrWhiteSpace(password)) 
+        {
+            errorMessage = "Please enter a password";
+            return;
+        }
+        
+        if (password.Length < 8)
+        {
+            errorMessage = "Password must be at least 8 characters";
+            return;
+        }
+        
+        if (password != confirmPassword) 
+        {
+            errorMessage = "Passwords don't match";
+            return;
+        }
+        
+        try 
+        {
+            successMessage = "Account created successfully!";
+            
+            username = "";
+            password = "";
+            confirmPassword = ""; ;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error creating account: {ex.Message}";
+        }
+    }
+}
