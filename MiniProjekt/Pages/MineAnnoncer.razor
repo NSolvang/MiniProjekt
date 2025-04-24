@@ -1,6 +1,12 @@
 @page "/MineAnnoncer"
+@inject NavigationManager nav
 <h3>Mine Annoncer</h3>
 
+<button class="btn-primary" @onclick="NavigateToAddAnnoncePage">Tilføj Annonce</button>
+
 @code {
-    
+    private void NavigateToAddAnnoncePage()
+    {
+        nav.NavigateTo("/AddAnnoncePage");
+    }
 }
