@@ -1,10 +1,11 @@
 using Core;
 
+
 namespace ServerAPI.Repositories;
 
 public class AnnonceRepositoryMongoDB : IAnnonceRepository
 {
-    public IEnumerable<Annonce> GetAll()
+    public Annonce[] GetAll()
     {
         throw new NotImplementedException();
     }

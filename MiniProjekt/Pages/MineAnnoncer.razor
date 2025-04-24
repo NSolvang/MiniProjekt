@@ -1,10 +1,57 @@
 @page "/MineAnnoncer"
+@using Core
+@using MiniProjekt.Service
+@inject IAnnonceService mService
 @inject NavigationManager nav
 <h3>Mine Annoncer</h3>
 
-<button class="btn-primary" @onclick="NavigateToAddAnnoncePage">Tilføj Annonce</button>
+@if (annonce == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+
+        <tbody>
+        @foreach (var annonce in annonce)
+        {
+            <tr class="bikeRow">
+                <td><h2>@annonce.Title - @annonce.Category</h2><br />
+                    Price: @annonce.Price kr.</td>
+               <!-- <td><img class="bikeImg" src="@annonce.ImageUrl" width="200px"/></td>-->
+                <td><button class="btn-primary" @onclick="() => DeleteById(annonce)">Delete</button></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <button class="btn-primary" @onclick="NavigateToAddAnnoncePage">Tilføj Annonce</button>
+}
+
+
+
 
 @code {
+
+    private Annonce[]? annonce;
+        
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAll();
+    }
+
+    private async Task LoadAll()
+    {
+        annonce = await mService.GetAll();
+    }
+    
+    private async Task DeleteById(Annonce annonce)
+    {
+        await mService.DeleteById(annonce.AnnonceID);
+        await LoadAll();
+
+    }
+    
     private void NavigateToAddAnnoncePage()
     {
         nav.NavigateTo("/AddAnnoncePage");
