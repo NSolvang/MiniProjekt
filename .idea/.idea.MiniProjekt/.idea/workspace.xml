@@ -10,7 +10,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5ba1b23-2793-443a-a237-79eb94a3490c" name="Changes" comment="Tilføjet sider, modelklasser og repository ServerAPI projekt" />
+    <list default="true" id="a5ba1b23-2793-443a-a237-79eb94a3490c" name="Changes" comment="Tilføjet sider, modelklasser og repository ServerAPI projekt">
+      <change afterPath="$PROJECT_DIR$/MiniProjekt/Logic/AnnonceProduct.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MiniProjekt/Pages/AddAnnoncePage.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.MiniProjekt/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MiniProjekt/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Annonce.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Annonce.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MiniProjekt/gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/MiniProjekt/gitignore" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="niko" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -33,12 +39,12 @@
     &quot;assignee&quot;: &quot;NSolvang&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/NSolvang/MiniProjekt.git&quot;,
-    &quot;accountId&quot;: &quot;af8c5e25-e001-4cbd-9386-d621ee7a3cc4&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/NSolvang/MiniProjekt.git",
+    "accountId": "53cce7ea-4c30-44ef-b3da-1a8564b07ed8"
   }
-}</component>
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock://C:/Users/Bruger/RiderProjects/MiniProjekt/MiniProjekt/App.razor" root0="SKIP_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
     <setting file="mock://C:/Users/Bruger/RiderProjects/MiniProjekt/MiniProjekt/Pages/Weather.razor" root0="SKIP_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
@@ -58,20 +64,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.MiniProjekt: http.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;niko&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.MiniProjekt: http.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "nicl",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.MiniProjekt: http">
     <configuration name="MiniProjekt: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/MiniProjekt/MiniProjekt.csproj" />
@@ -145,6 +151,7 @@
       <updated>1745401663801</updated>
       <workItem from="1745401666661" duration="4325000" />
       <workItem from="1745410729961" duration="10333000" />
+      <workItem from="1745476027392" duration="2196000" />
     </task>
     <task id="LOCAL-00001" summary="paven er død">
       <option name="closed" value="true" />
