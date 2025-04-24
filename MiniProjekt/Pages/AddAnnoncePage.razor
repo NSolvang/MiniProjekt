@@ -1,6 +1,86 @@
 @page "/AddAnnoncePage"
-<h3>AddAnnoncePage</h3>
+@using Core
+@inject NavigationManager nav
+@inject Blazored.LocalStorage.ILocalStorageService localstore
+
+<h1>Tilføj Annonce</h1>
+
+<EditForm EditContext="@editContext" OnSubmit="@HandleSubmit" class="row p-3">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="col-md-12 mb-3">
+        <label for="Name">Title</label>
+        <InputText id="Name" @bind-Value="aAnnonce.Title" class="form-control" />
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="Price">Price</label>
+        <InputNumber id="Price" @bind-Value="aAnnonce.Price" class="form-control" />
+    </div>
+
+    <div class="col-md-12 mb-3">
+        <label for="Description">Description</label>
+        <InputTextArea id="Description" @bind-Value="aAnnonce.Description" class="form-control" />
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="Category">Category</label>
+        <InputSelect id="Category" @bind-Value="aAnnonce.Category" class="form-control">
+            @foreach (var anOption in options)
+            {
+                <option value="@anOption">@anOption</option>
+            }
+        </InputSelect>
+    </div>
+    
+    <div class="col-md-12 mb-3">
+        <label for="Status">Status</label>
+        <InputTextArea id="Status" @bind-Value="aAnnonce.Status" class="form-control" />
+    </div>
+
+    <div class="col-12 mb-3">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+
+    <button class="btn btn-secondary" @onclick="NavigateToMineAnnoncerPage">Go Back</button>
+</EditForm>
 
 @code {
-    
+    private Annonce aAnnonce = new() { Category = "" };
+    private string[] options = { "Tøj", "Elektronik", "Bolig"};
+    private EditContext editContext; 
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(aAnnonce);
+    }
+
+    private async Task HandleSubmit()
+    {
+        if (!editContext.Validate()) 
+        {
+            return; 
+        }
+
+        var annonce = await localstore.GetItemAsync<List<Annonce>>("Annoncer") ?? new List<Annonce>();
+
+        annonce.Add(new Annonce
+        {
+            Title = aAnnonce.Title,
+            Price = aAnnonce.Price,
+            Description = aAnnonce.Description,
+            Category = aAnnonce.Category,
+            Status= aAnnonce.Status
+        });
+
+        await localstore.SetItemAsync("Annoncer", annonce);
+
+        nav.NavigateTo("/MineAnnoncer");
+    }
+
+    private void NavigateToMineAnnoncerPage()
+    {
+        nav.NavigateTo("/MineAnnoncer");
+    }
 }
