@@ -4,7 +4,8 @@ namespace ServerAPI.Repositories;
 public interface IAnnonceRepository
 {
     Annonce[] GetAll();
-    Annonce GetById(int id);
     void Add(Annonce annonce);
     void DeleteById(int id);
+    
+    void Update(Annonce annonce);
 }

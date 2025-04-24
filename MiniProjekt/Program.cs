@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using Core;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddBlazoredLocalStorage(); // Tilføj denne linje
 
-//builder.Services.AddSingleton<IAnnonceService,>();
+builder.Services.AddScoped<IAnnonceService,AnnonceServiceServer>();
 
 await builder.Build().RunAsync();

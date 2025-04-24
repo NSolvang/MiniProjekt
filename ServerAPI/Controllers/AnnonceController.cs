@@ -2,17 +2,16 @@ using Microsoft.AspNetCore.Mvc;
 using ServerAPI.Repositories;
 
 using Core;
-namespace ServerAPI.Controllers;
 
-public class AnnonceController
+namespace ServerAPI.Controllers
 {
     [ApiController]
     [Route("api/annoncer")]
-    public class BikeController : ControllerBase
+    public class AnnonceController : ControllerBase
     {
         private IAnnonceRepository annonceRepo;
 
-        public BikeController(IAnnonceRepository annonceRepo) {
+        public AnnonceController(IAnnonceRepository annonceRepo) {
             this.annonceRepo = annonceRepo;
         }
 
@@ -23,8 +22,8 @@ public class AnnonceController
         }
         
         [HttpPost]
-        public void Add(Annonce annonce) {
-            annonceRepo.Add(annonce);
+        public void Add(Annonce bike) {
+            annonceRepo.Add(bike);
         }
 
         [HttpDelete]
