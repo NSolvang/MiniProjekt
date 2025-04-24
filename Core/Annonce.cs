@@ -1,8 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 namespace Core;
 
 public class Annonce
 {
+    
+    public ObjectId _id { get; set; }
     public int AnnonceID { get; set; }
     
     [Required]

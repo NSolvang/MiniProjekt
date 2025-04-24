@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using Blazored.LocalStorage;
+using Core;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,10 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddScoped<ILoginService, LoginServiceClientSlide>();
 
+// Tilføj services fra begge grene
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<ILoginService, LoginServiceClientSlide>();
+builder.Services.AddScoped<IAnnonceService, AnnonceServiceServer>();
+
 await builder.Build().RunAsync();
