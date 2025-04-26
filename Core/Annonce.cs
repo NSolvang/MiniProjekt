@@ -6,8 +6,9 @@ namespace Core;
 public class Annonce
 {
     
-    public ObjectId _id { get; set; }
-    public int AnnonceID { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)] 
+    public string? Id { get; set; }   
     
     [Required]
     [StringLength(50, MinimumLength = 2, ErrorMessage = "Title must be between 2 and 50 characters.")]
@@ -21,7 +22,7 @@ public class Annonce
     public string Description { get; set; }
     
     public string Category { get; set; }
-    
-    public string Status { get; set; }
+
+    public string Status { get; set; } = "Aktiv";
 
 }

@@ -1,8 +1,9 @@
 @page "/AddAnnoncePage"
 @using Core
+@using MiniProjekt.Service
+@using Core
 @inject NavigationManager nav
-@inject Blazored.LocalStorage.ILocalStorageService localstore
-
+@inject IAnnonceService mAnnonce
 <h1>Tilføj Annonce</h1>
 
 <EditForm EditContext="@editContext" OnSubmit="@HandleSubmit" class="row p-3">
@@ -34,11 +35,6 @@
         </InputSelect>
     </div>
     
-    <div class="col-md-12 mb-3">
-        <label for="Status">Status</label>
-        <InputTextArea id="Status" @bind-Value="aAnnonce.Status" class="form-control" />
-    </div>
-
     <div class="col-12 mb-3">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
@@ -47,7 +43,7 @@
 </EditForm>
 
 @code {
-    private Annonce aAnnonce = new() { Category = "" };
+    private Annonce aAnnonce = new() { Category = ""};
     private string[] options = { "Tøj", "Elektronik", "Bolig"};
     private EditContext editContext; 
 
@@ -62,20 +58,9 @@
         {
             return; 
         }
-
-        var annonce = await localstore.GetItemAsync<List<Annonce>>("Annoncer") ?? new List<Annonce>();
-
-        annonce.Add(new Annonce
-        {
-            Title = aAnnonce.Title,
-            Price = aAnnonce.Price,
-            Description = aAnnonce.Description,
-            Category = aAnnonce.Category,
-            Status= aAnnonce.Status
-        });
-
-        await localstore.SetItemAsync("Annoncer", annonce);
-
+        
+        await mAnnonce.Add(aAnnonce);
+        
         nav.NavigateTo("/MineAnnoncer");
     }
 

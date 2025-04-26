@@ -5,7 +5,7 @@ public interface IAnnonceRepository
 {
     Annonce[] GetAll();
     void Add(Annonce annonce);
-    void DeleteById(int id);
+    void DeleteById(string id);
     
     void Update(Annonce annonce);
 }

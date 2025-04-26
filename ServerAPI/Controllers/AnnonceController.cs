@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ServerAPI.Repositories;
-
 using Core;
+using MongoDB.Bson;
 
 namespace ServerAPI.Controllers
 {
@@ -16,19 +16,25 @@ namespace ServerAPI.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Annonce> Get()
+        public  IEnumerable<Annonce> Get()
         {
             return annonceRepo.GetAll();
         }
         
         [HttpPost]
-        public void Add(Annonce bike) {
-            annonceRepo.Add(bike);
+        public void Add(Annonce annonce)
+        {
+            if (string.IsNullOrEmpty(annonce.Id))
+            {
+                annonce.Id = ObjectId.GenerateNewId().ToString();  
+            }
+            annonceRepo.Add(annonce);
         }
 
-        [HttpDelete]
-        [Route("{id:int}")]
-        public void DeleteById(int id)
+
+
+        [HttpDelete("{id}")]
+        public void DeleteById(string id)
         {
             Console.WriteLine($"Sletter annonce med id {id}");
             annonceRepo.DeleteById(id);

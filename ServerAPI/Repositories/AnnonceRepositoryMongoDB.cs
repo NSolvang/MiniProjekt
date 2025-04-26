@@ -42,31 +42,18 @@ public class AnnonceRepositoryMongoDB : IAnnonceRepository
         return annonceCollection.Find(noFilter).ToList().ToArray();
     }
     
-    private int MaxId() {
-      
-        var annoncer = GetAll();
-        if (annoncer.Length == 0)
-            return 0;
-        return annoncer.Select(b => b.AnnonceID).Max();
-
-    }
-    
     public void Add(Annonce annonce)
     {
-        var max = 0;
-        if (annonceCollection.Count(Builders<Annonce>.Filter.Empty) > 0)
-        {
-            max = MaxId();
-        }
-        annonce.AnnonceID = max + 1;
-    
         annonceCollection.InsertOne(annonce);
     }
 
-    public void DeleteById(int id)
+
+    public void DeleteById(string id)
     {
-        var deleteResult = annonceCollection
-            .DeleteOne(Builders<Annonce>.Filter.Where(r => r.AnnonceID == id));
+        // For MongoDB skal du konvertere string ID til ObjectId
+        var objectId = MongoDB.Bson.ObjectId.Parse(id);
+        var filter = Builders<Annonce>.Filter.Eq("_id", objectId);
+        annonceCollection.DeleteOne(filter);
     }
     
     public void Update(Annonce item)
@@ -76,6 +63,6 @@ public class AnnonceRepositoryMongoDB : IAnnonceRepository
             .Set(x => x.Category, item.Category)
             .Set(x => x.Price, item.Price)
             .Set(x => x.Description, item.Description);
-        annonceCollection.UpdateOne(x => x.AnnonceID == item.AnnonceID, updateDef);
+        annonceCollection.UpdateOne(x => x.Id == item.Id, updateDef);
     }
 }
