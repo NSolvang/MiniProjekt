@@ -3,17 +3,70 @@
 @using MiniProjekt.Service
 @inject NavigationManager navMan
 @inject ILoginService loginService
+@inject IAnnonceService mAnnonce
 
 
 <h3>Marked</h3>
 
 <button class="btn-primary" @onclick="NavigateToMineAnnoncer">Mine Annoncer</button>
 <button class="btn-primary" @onclick="NavigateToMineBuys">Mine køb</button>
+<InputText placeholder="Søg .." @bind-Value="inputWord"></InputText>
+<button @onclick="() => ContainWords(inputWord)">Søg</button>
+
+
+@if (annoncer == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (annoncer.Length == 0)
+{
+    <p>Ingen annoncer fundet.</p>
+}
+else
+{
+    <table class="table">
+
+        <tbody>
+        @foreach (var annonce in annoncer)
+        {
+            <tr>
+                <td><h2>@annonce.Title - @annonce.Category</h2><br />
+                    Price: @annonce.Price kr.</td>
+                <td>Description: @annonce.Description</td>
+                <td>Status: @annonce.Status</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
 
 @code {
+
+    private Annonce[]? annoncer;
     
+    private string? inputWord;
     
+    protected override async Task OnInitializedAsync()
+    {
+        var loggedIn = await loginService.GetUserLoggedIn();
+        if (loggedIn is null)
+            navMan.NavigateTo("/LoginPage/Marked");
+        
+        annoncer = await mAnnonce.GetAll();
+    }
     
+    private async Task ContainWords(string input)
+    {
+        annoncer = await mAnnonce.GetAll();
+
+        List<Annonce> wordsContain = new();
+        foreach (var x in annoncer)
+            if (x.Title.ToLower().Contains(input.ToLower()))
+                wordsContain.Add(x);
+        
+        annoncer = wordsContain.ToArray();
+    }
     private void NavigateToMineAnnoncer()
     {
         navMan.NavigateTo("mineannoncer");
@@ -24,11 +77,6 @@
         navMan.NavigateTo("minebuys");
     }
     
-    protected override async Task OnInitializedAsync()
-    {
-        var loggedIn = await loginService.GetUserLoggedIn();
-        if (loggedIn is null)
-            navMan.NavigateTo("/LoginPage/Marked");
-    }
+  
 
 }
