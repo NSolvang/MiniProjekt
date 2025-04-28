@@ -24,5 +24,6 @@ public class Annonce
     public string Category { get; set; }
 
     public string Status { get; set; } = "Aktiv";
+    
 
 }
