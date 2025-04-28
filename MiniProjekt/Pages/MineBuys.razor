@@ -1,6 +1,65 @@
 @page "/MineBuys"
+@using Core
+@using MiniProjekt.Service
+@inject IAnnonceService mService
+@inject NavigationManager nav
+@inject ILoginService mLogin
 <h3>Mine køb</h3>
 
+@if (myPurchases == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (myPurchases.Length == 0)
+{
+    <p>Du har ikke købt nogen annoncer endnu.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Titel</th>
+            <th>Pris</th>
+            <th>Kategori</th>
+            <th>Købsdato</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var purchase in myPurchases)
+        {
+            <tr>
+                <td>@purchase.Title</td>
+                <td>@purchase.Price kr.</td>
+                <td>@purchase.Category</td>
+                <td>@(purchase.SoldDate?.ToString("dd/MM/yyyy") ?? "N/A")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
 @code {
+    private Annonce[]? myPurchases;
+    private string? currentUserId;
     
+    protected override async Task OnInitializedAsync()
+    {
+        User? currentUser = await mLogin.GetUserLoggedIn();
+
+        var loggedIn = await mLogin.GetUserLoggedIn();
+        if (loggedIn is null)
+        {
+            nav.NavigateTo("/LoginPage/MineBuys");
+        }
+        else
+        {
+            currentUserId = loggedIn.Id.ToString(); // Eller en tilsvarende ID-egenskab
+        }
+        
+        myPurchases = await mService.GetAll();
+        myPurchases = myPurchases.Where(a => a.BuyerId == currentUser!.Id).ToArray();
+
+    }
+ 
 }

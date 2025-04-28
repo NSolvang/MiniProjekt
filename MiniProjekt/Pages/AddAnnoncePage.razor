@@ -3,6 +3,7 @@
 @using MiniProjekt.Service
 @using Core
 @inject NavigationManager nav
+@inject ILoginService mLogin
 @inject IAnnonceService mAnnonce
 <h1>Tilføj Annonce</h1>
 
@@ -58,7 +59,9 @@
         {
             return; 
         }
-        
+
+        User? currentUser = await mLogin.GetUserLoggedIn();
+        aAnnonce.SellerId = currentUser.Id;
         await mAnnonce.Add(aAnnonce);
         
         nav.NavigateTo("/MineAnnoncer");

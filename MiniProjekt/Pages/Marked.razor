@@ -2,8 +2,9 @@
 @using Core
 @using MiniProjekt.Service
 @inject NavigationManager navMan
-@inject ILoginService loginService
+@inject ILoginService mLogin
 @inject IAnnonceService mAnnonce
+
 
 
 <h3>Marked</h3>
@@ -39,7 +40,7 @@ else
         </tbody>
     </table>
 }
-
+ 
 
 @code {
 
@@ -49,7 +50,7 @@ else
     
     protected override async Task OnInitializedAsync()
     {
-        var loggedIn = await loginService.GetUserLoggedIn();
+        var loggedIn = await mLogin.GetUserLoggedIn();
         if (loggedIn is null)
             navMan.NavigateTo("/LoginPage/Marked");
         
@@ -67,6 +68,7 @@ else
         
         annoncer = wordsContain.ToArray();
     }
+    
     private void NavigateToMineAnnoncer()
     {
         navMan.NavigateTo("mineannoncer");
@@ -77,6 +79,4 @@ else
         navMan.NavigateTo("minebuys");
     }
     
-  
-
 }

@@ -25,5 +25,12 @@ public class Annonce
 
     public string Status { get; set; } = "Aktiv";
     
+    [Required]
+    public int SellerId { get; set; } // Referencer Seller (User)
+
+    // NYT: Reference til Buyer (hvis annoncen er solgt)
+    public int? BuyerId { get; set; } // Nullable fordi det måske ikke er solgt endnu
+    
+    public DateTime? SoldDate { get; set; }
 
 }

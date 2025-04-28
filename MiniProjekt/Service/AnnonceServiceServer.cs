@@ -54,5 +54,6 @@ public class AnnonceServiceServer : IAnnonceService
         await client.DeleteAsync($"{serverUrl}api/annoncer/{id}");
 
     }
-    
+
+ 
 }

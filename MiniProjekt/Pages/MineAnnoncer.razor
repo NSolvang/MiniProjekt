@@ -3,6 +3,7 @@
 @using MiniProjekt.Service
 @inject IAnnonceService mService
 @inject NavigationManager nav
+@inject ILoginService mLogin
 <h3>Mine Annoncer</h3>
 
 @if (annoncer == null)
@@ -43,12 +44,18 @@ else
         
     protected override async Task OnInitializedAsync()
     {
+        User? currentUser = await mLogin.GetUserLoggedIn();
+        if (currentUser == null)
+            nav.NavigateTo("/login");
         await LoadAll();
     }
 
     private async Task LoadAll()
     {
+        User? currentUser = await mLogin.GetUserLoggedIn();
+
         annoncer = await mService.GetAll();
+        annoncer = annoncer.Where(a => a.SellerId == currentUser!.Id).ToArray();
     }
     
     private async Task DeleteById(Annonce annonce)

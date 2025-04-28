@@ -1,3 +1,5 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 namespace Core;
 
 public class User
@@ -14,6 +16,7 @@ public class Seller : User
      public int SellerID { get; set; }
      
      public string Name { get; set; } 
+    
 }
 
 public class Buyer : User
