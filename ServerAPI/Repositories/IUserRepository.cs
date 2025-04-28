@@ -5,5 +5,6 @@ namespace ServerAPI.Repositories;
 public interface IUserRepository
 {
     void AddUser(User user);
-    User? GetById(int id);
+    User? GetUser(string username, string password);
+    User? GetUserById(int id);
 }

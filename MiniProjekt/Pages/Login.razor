@@ -1,7 +1,7 @@
-@page "/LoginPage/{target:alpha}"
+@page "/LoginPage/{target:alpha?}"
 @using MiniProjekt.Service
 @inject NavigationManager navManger
-@inject ILoginService loginService
+@inject ILoginService LoginService
 
 <link href="css/Login.css" rel="stylesheet" />
 
@@ -59,7 +59,7 @@
     bool showError = false;
     
     [Parameter]
-    public string target { get; set; }   
+    public string? target { get; set; }   
 
     private async Task OnClickLogin()
     {
@@ -74,7 +74,7 @@
             return;
         }
 
-        var success = await loginService.Login(username, password);
+        var success = await LoginService.Login(username, password);
 
         if (!success)
         {
@@ -83,7 +83,8 @@
         }
         else
         {
-            navManger.NavigateTo("Marked");
+            // Use the target parameter if provided, otherwise navigate to default
+            navManger.NavigateTo(!string.IsNullOrEmpty(target) ? target : "Marked");
         }
     }
 }

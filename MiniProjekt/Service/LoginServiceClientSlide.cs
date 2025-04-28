@@ -2,11 +2,11 @@ using Blazored.LocalStorage;
 using Core;
 using MiniProjekt.Service;
 
-namespace SwapClothes.Service;
+namespace MiniProjekt.Service;
 
-public class LoginServiceClientSlide: ILoginService
+public class LoginServiceClientSlide : ILoginService
 {
-    private ILocalStorageService localStorage { get; set; }
+    private readonly ILocalStorageService localStorage;
 
     public LoginServiceClientSlide(ILocalStorageService ls)
     {
@@ -15,19 +15,27 @@ public class LoginServiceClientSlide: ILoginService
 
     public async Task<User?> GetUserLoggedIn()
     {
-        var res = await localStorage.GetItemAsync<User>("user");
-        return res;
+        return await localStorage.GetItemAsync<User>("user");
     }
 
-    public async Task<bool> Login(string UserName, string Password)
+    public async Task<bool> Login(string userName, string password)
     {
-        if (UserName.Equals("peter") && Password.Equals("1234"))
+        // This is just a placeholder - in a real app you'd call an API
+        if (userName.Equals("demo") && password.Equals("demo123"))
         {
-            User user = new User { Username = UserName, Password = "verfied"};
+            User user = new User 
+            { 
+                Username = userName, 
+                Password = "verified" 
+            };
             await localStorage.SetItemAsync("user", user);
+            return true;
         }
-
-        return true;
+        return false;
     }
-    
+
+    public async Task AddUser(User user)
+    {
+        await localStorage.SetItemAsync("user", user);
+    }
 }

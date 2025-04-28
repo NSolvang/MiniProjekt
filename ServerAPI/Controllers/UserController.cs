@@ -2,11 +2,11 @@ using Core;
 using Microsoft.AspNetCore.Mvc;
 using ServerAPI.Repositories;
 
-namespace ServerAPI.Controllers
+namespace WebApplication4.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : ControllerBase  // Changed from 'Controllers' to 'ControllerBase'
+    public class UserController : ControllerBase
     {
         private readonly IUserRepository _repository;
 
@@ -16,10 +16,18 @@ namespace ServerAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<User> GetUserById(int id)  // Changed parameter name from UserID to id to match route
+        public ActionResult<User> GetUserById(int id)
         {
-            var user = _repository.GetById(id);  // Changed variable name from product to user
-            if (user == null) return NotFound($"User with id {id} not found");
+            var user = _repository.GetUserById(id);
+            if (user == null) return NotFound("User not found");
+            return Ok(user);
+        }
+
+        [HttpPost("login")]
+        public ActionResult<User> Login([FromBody] LoginRequest request)
+        {
+            var user = _repository.GetUser(request.Username, request.Password);
+            if (user == null) return NotFound("Invalid credentials");
             return Ok(user);
         }
 
@@ -27,7 +35,14 @@ namespace ServerAPI.Controllers
         public ActionResult<User> AddUser([FromBody] User user)
         {
             _repository.AddUser(user);
-            return CreatedAtAction(nameof(GetUserById), new { id = user.UserID }, user);
+            return CreatedAtAction(nameof(GetUserById), new { id = user.ID }, user);
         }
     }
+
+    public class LoginRequest
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+    
 }

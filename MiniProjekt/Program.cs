@@ -1,13 +1,8 @@
-using System;
-using System.Net.Http;
 using Blazored.LocalStorage;
-using Core;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using MiniProjekt;
 using MiniProjekt.Service;
-using SwapClothes.Service;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -17,7 +12,8 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 // Tilføj services fra begge grene
 builder.Services.AddBlazoredLocalStorage();
-builder.Services.AddScoped<ILoginService, LoginServiceClientSlide>();
-builder.Services.AddScoped<IAnnonceService, AnnonceServiceServer>();
+builder.Services.AddScoped<ILoginService, LoginServiceServer>();
+builder.Services.AddSingleton<IAnnonceService, AnnonceServiceServer>();
 
 await builder.Build().RunAsync();
+
