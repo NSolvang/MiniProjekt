@@ -10,7 +10,7 @@ namespace ServerAPI.Repositories
         public UserRepositoryMongoDb()
         {
             // Local MongoDB connection - samme som ProductRepository
-            var mongoUri = "$mongodb+srv://niko6041:1234@cluster.codevrj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster";
+            var mongoUri = "mongodb+srv://niko6041:1234@cluster.codevrj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster";
             
             try
             {
@@ -35,8 +35,8 @@ namespace ServerAPI.Repositories
                 throw new Exception("Username already exists");
 
             // Generer nyt ID hvis nødvendigt
-            if (user.ID == 0)
-                user.ID = GenerateNewId();
+            if (user.Id == 0)
+                user.Id = GenerateNewId();
 
             _userCollection.InsertOne(user);
         }
@@ -49,7 +49,7 @@ namespace ServerAPI.Repositories
 
         public User? GetUserById(int id)
         {
-            return _userCollection.Find(u => u.ID == id)
+            return _userCollection.Find(u => u.Id == id)
                 .FirstOrDefault();
         }
 
@@ -62,9 +62,9 @@ namespace ServerAPI.Repositories
             // Find det højeste ID og increment
             return _userCollection
                 .Find(FilterDefinition<User>.Empty)
-                .SortByDescending(u => u.ID)
+                .SortByDescending(u => u.Id)
                 .Limit(1)
-                .FirstOrDefault()?.ID + 1 ?? 1;
+                .FirstOrDefault()?.Id + 1 ?? 1;
         }
     }
 }                                                      

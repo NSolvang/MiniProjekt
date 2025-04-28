@@ -35,7 +35,7 @@ namespace WebApplication4.Controllers
         public ActionResult<User> AddUser([FromBody] User user)
         {
             _repository.AddUser(user);
-            return CreatedAtAction(nameof(GetUserById), new { id = user.ID }, user);
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
     }
 

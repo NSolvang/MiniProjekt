@@ -13,7 +13,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 // Tilføj services fra begge grene
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<ILoginService, LoginServiceServer>();
-builder.Services.AddSingleton<IAnnonceService, AnnonceServiceServer>();
+builder.Services.AddScoped<IAnnonceService, AnnonceServiceServer>();
 
 await builder.Build().RunAsync();
 
