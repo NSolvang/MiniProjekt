@@ -5,21 +5,21 @@ namespace ServerAPI.Repositories
 {
     public class UserRepositoryMongoDb : IUserRepository
     {
-        private readonly IMongoCollection<User> _UserCollection;
+        private readonly IMongoCollection<User> _userCollection;
 
         public UserRepositoryMongoDb()
         {
-            // Local MongoDB connection
-            var mongoUri = "mongodb://localhost:27017/";
+            // Local MongoDB connection - samme som ProductRepository
+            var mongoUri = "$mongodb+srv://niko6041:1234@cluster.codevrj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster";
             
             try
             {
                 var client = new MongoClient(mongoUri);
-                var dbName = "markedDatabase";  // Fixed typo in "markedDasebase"
-                var collectionName = "UserCollection";
+                var dbName = "markedDatabase"; // Samme database som Products
+                var collectionName = "user"; // Andet collection navn
 
-                _UserCollection = client.GetDatabase(dbName)
-                    .GetCollection<User>(collectionName);
+                _userCollection = client.GetDatabase(dbName)
+                   .GetCollection<User>(collectionName);
             }
             catch (Exception e)
             {
@@ -30,34 +30,41 @@ namespace ServerAPI.Repositories
 
         public void AddUser(User user)
         {
-            // Generate a new ID if not already set
-            if (user.UserID == 0)
-            {
-                user.UserID = GenerateNewId();
-            }
-            
-            _UserCollection.InsertOne(user);
+            // Tjek om brugernavnet allerede findes
+            if (_userCollection.Find(u => u.Username == user.Username).Any())
+                throw new Exception("Username already exists");
+
+            // Generer nyt ID hvis nødvendigt
+            if (user.ID == 0)
+                user.ID = GenerateNewId();
+
+            _userCollection.InsertOne(user);
+        }
+
+        public User? GetUser(string username, string password)
+        {
+            return _userCollection.Find(u => u.Username == username && u.Password == password)
+                .FirstOrDefault();
+        }
+
+        public User? GetUserById(int id)
+        {
+            return _userCollection.Find(u => u.ID == id)
+                .FirstOrDefault();
         }
 
         private int GenerateNewId()
         {
-            // If collection is empty, start with 1
-            if (_UserCollection.CountDocuments(FilterDefinition<User>.Empty) == 0)
-            {
+            // Hvis collection er tom, start med 1
+            if (_userCollection.CountDocuments(FilterDefinition<User>.Empty) == 0)
                 return 1;
-            }
 
-            // Find the maximum ID and increment
-            return _UserCollection
+            // Find det højeste ID og increment
+            return _userCollection
                 .Find(FilterDefinition<User>.Empty)
-                .SortByDescending(p => p.UserID)
+                .SortByDescending(u => u.ID)
                 .Limit(1)
-                .FirstOrDefault()?.UserID + 1 ?? 1;
-        }
-
-        public User? GetById(int id)
-        {
-            return _UserCollection.Find(p => p.UserID == id).FirstOrDefault();
+                .FirstOrDefault()?.ID + 1 ?? 1;
         }
     }
-}
+}                                                      

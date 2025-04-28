@@ -22,6 +22,7 @@ public class Program
                 });
         });
         builder.Services.AddSingleton<IAnnonceRepository, AnnonceRepositoryMongoDB>();
+        builder.Services.AddSingleton<IUserRepository, UserRepositoryMongoDb>(); 
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 

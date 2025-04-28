@@ -4,7 +4,7 @@ namespace MiniProjekt.Service;
 
 public interface ILoginService
 {
-    Task<User> GetUserLoggedIn();
-    
-    Task<bool> Login(string UserName, string Password);
+    Task<bool> Login(string userName, string password);
+    Task<User?> GetUserLoggedIn();
+    Task AddUser(User user);
 }

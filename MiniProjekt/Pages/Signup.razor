@@ -1,8 +1,11 @@
 @page "/Sign"
+@using MiniProjekt.Logic
 @using MiniProjekt.Service
+@using Core
 @inject NavigationManager navManager
 @inject ILoginService loginService
 
+<link href="css/Login.css" rel="stylesheet" />
 
 <div class="signup-container">
     <div class="signup-card">
@@ -11,38 +14,54 @@
             <p>Choose your username and password</p>
         </div>
 
-        <div class="form-group">
-            <label>Username</label>
-            <div class="input-with-icon">
-                <i class="fas fa-user"></i>
-                <InputText class="form-control" @bind-Value="username" placeholder="Choose a username" />
-            </div>
-        </div>
+        <EditForm Model="@createUserDto" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-        <div class="form-group">
-            <label>Password</label>
-            <div class="input-with-icon">
-                <i class="fas fa-lock"></i>
-                <InputText class="form-control" type="password" @bind-Value="password" 
-                            placeholder="••••••••" />
+            <div class="form-group">
+                <label>Username</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-user"></i>
+                    <InputText class="form-control" @bind-Value="createUserDto.Username" placeholder="Choose a username" />
+                </div>
+                <ValidationMessage For="@(() => createUserDto.Username)" />
             </div>
-            <div class="password-hint">
-                Password must be at least 8 characters
-            </div>
-        </div>
 
-        <div class="form-group">
-            <label>Confirm Password</label>
-            <div class="input-with-icon">
-                <i class="fas fa-lock"></i>
-                <InputText class="form-control" type="password" @bind-Value="confirmPassword" 
-                            placeholder="••••••••" />
+            <div class="form-group">
+                <label>Password</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <InputText class="form-control" type="password" @bind-Value="createUserDto.Password" 
+                                placeholder="••••••••" />
+                </div>
+                <ValidationMessage For="@(() => createUserDto.Password)" />
+                <div class="password-hint">
+                    Password must be between 8-10 characters
+                </div>
             </div>
-        </div>
 
-        <button class="Create" @onclick="OnClickSignUp" type="button">
-            Create Account
-        </button>
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <InputText class="form-control" type="password" @bind-Value="createUserDto.ConfirmPassword" 
+                                placeholder="••••••••" />
+                </div>
+                <ValidationMessage For="@(() => createUserDto.ConfirmPassword)" />
+            </div>
+
+            <button type="submit" class="signup-button" disabled="@isProcessing">
+                @if (isProcessing)
+                {
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span>Creating Account...</span>
+                }
+                else
+                {
+                    <span>Create Account</span>
+                }
+            </button>
+        </EditForm>
 
         @if (!string.IsNullOrEmpty(errorMessage))
         {
@@ -65,53 +84,50 @@
 </div>
 
 @code {
-    private string username = "";
-    private string password = "";
-    private string confirmPassword = "";
+    private CreateUserDto createUserDto = new CreateUserDto();
     private string errorMessage = "";
     private string successMessage = "";
+    private bool isProcessing = false;
 
-    private async Task OnClickSignUp()
+    private async Task HandleValidSubmit()
     {
         errorMessage = "";
         successMessage = "";
+        isProcessing = true;
+        
+        try
+        {
+            // Validate passwords match
+            if (createUserDto.Password != createUserDto.ConfirmPassword)
+            {
+                errorMessage = "Passwords do not match";
+                isProcessing = false;
+                return;
+            }
+            
+            var user = new User
+            {
+                Username = createUserDto.Username,
+                Password = createUserDto.Password
+            };
 
-
-        if (string.IsNullOrWhiteSpace(username)) 
-        {
-            errorMessage = "Please choose a username";
-            return;
-        }
-        
-        if (string.IsNullOrWhiteSpace(password)) 
-        {
-            errorMessage = "Please enter a password";
-            return;
-        }
-        
-        if (password.Length < 8)
-        {
-            errorMessage = "Password must be at least 8 characters";
-            return;
-        }
-        
-        if (password != confirmPassword) 
-        {
-            errorMessage = "Passwords don't match";
-            return;
-        }
-        
-        try 
-        {
+            await loginService.AddUser(user);
             successMessage = "Account created successfully!";
             
-            username = "";
-            password = "";
-            confirmPassword = ""; ;
+            // Reset form
+            createUserDto = new CreateUserDto();
+            
+            // Optional: Redirect after successful creation
+            await Task.Delay(2000);
+            navManager.NavigateTo("/LoginPage/home");
         }
         catch (Exception ex)
         {
-            errorMessage = $"Error creating account: {ex.Message}";
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            isProcessing = false;
         }
     }
 }
