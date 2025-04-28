@@ -60,6 +60,7 @@ public class LoginServiceServer : ILoginService
     {
         await client.PostAsJsonAsync($"{serverUrl}api/User", user);
     }
+    
 }
 
 

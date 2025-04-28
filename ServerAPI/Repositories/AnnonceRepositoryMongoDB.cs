@@ -56,13 +56,15 @@ public class AnnonceRepositoryMongoDB : IAnnonceRepository
         annonceCollection.DeleteOne(filter);
     }
     
-    public void Update(Annonce item)
+    public async Task Update(Annonce annonce)
     {
-        var updateDef = Builders<Annonce>.Update
-            .Set(x => x.Title, item.Title)
-            .Set(x => x.Category, item.Category)
-            .Set(x => x.Price, item.Price)
-            .Set(x => x.Description, item.Description);
-        annonceCollection.UpdateOne(x => x.Id == item.Id, updateDef);
+        var filter = Builders<Annonce>.Filter.Eq(a => a.Id, annonce.Id);
+        await annonceCollection.ReplaceOneAsync(filter, annonce);
+    }
+    
+    public async Task<Annonce[]> GetByBuyerId(int buyerId)
+    {
+        var result = await annonceCollection.Find(x => x.BuyerId == buyerId).ToListAsync();
+        return result.ToArray();
     }
 }

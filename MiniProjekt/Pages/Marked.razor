@@ -5,8 +5,6 @@
 @inject ILoginService mLogin
 @inject IAnnonceService mAnnonce
 
-
-
 <h3>Marked</h3>
 
 <button class="btn-primary" @onclick="NavigateToMineAnnoncer">Mine Annoncer</button>
@@ -35,6 +33,7 @@ else
                     Price: @annonce.Price kr.</td>
                 <td>Description: @annonce.Description</td>
                 <td>Status: @annonce.Status</td>
+                <td><button class="btn-primary" @onclick="() => BuyAnnonce(annonce)">Køb</button></td>
             </tr>
         }
         </tbody>
@@ -77,6 +76,32 @@ else
     private void NavigateToMineBuys()
     {
         navMan.NavigateTo("minebuys");
+    }
+    
+    private async Task BuyAnnonce(Annonce annonce)
+    {
+        // Hent den indloggede bruger
+        var loggedInUser = await mLogin.GetUserLoggedIn();
+    
+        if (loggedInUser is null)
+        {
+            navMan.NavigateTo("/LoginPage/Marked");
+            return;
+        }
+    
+        // Opdater annoncen med køber-id, status og salgsdato
+        annonce.BuyerId = loggedInUser.Id;
+        annonce.Status = "Solgt";
+        annonce.SoldDate = DateTime.Now;
+    
+        // Gem de opdaterede oplysninger
+        await mAnnonce.Update(annonce);
+    
+        // Opdater listen af annoncer
+        annoncer = await mAnnonce.GetAll();
+    
+        // Optional: Naviger til Mine køb siden
+        // navMan.NavigateTo("minebuys");
     }
     
 }

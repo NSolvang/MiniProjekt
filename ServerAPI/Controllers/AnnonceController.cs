@@ -30,14 +30,31 @@ namespace ServerAPI.Controllers
             }
             annonceRepo.Add(annonce);
         }
-
-
-
+        
         [HttpDelete("{id}")]
         public void DeleteById(string id)
         {
             Console.WriteLine($"Sletter annonce med id {id}");
             annonceRepo.DeleteById(id);
+        }
+        
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, Annonce annonce)
+        {
+            if (id != annonce.Id)
+            {
+                return BadRequest("ID i URL stemmer ikke overens med ID i annoncen");
+            }
+    
+            await annonceRepo.Update(annonce);
+            return NoContent();
+        }
+        
+        [HttpGet("buyer/{buyerId}")]
+        public async Task<IActionResult> GetByBuyerId(int buyerId)
+        {
+            var annoncer = await annonceRepo.GetByBuyerId(buyerId);
+            return Ok(annoncer);
         }
     }
 }

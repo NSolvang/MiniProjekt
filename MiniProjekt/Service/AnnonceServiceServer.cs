@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using Core;
+using MongoDB.Driver;
 
 namespace MiniProjekt.Service;
 
@@ -8,7 +9,7 @@ public class AnnonceServiceServer : IAnnonceService
     private string serverUrl = "http://localhost:5063/";
     
     private HttpClient client;
-
+    
     public AnnonceServiceServer(HttpClient client)
     {
         this.client = client;
@@ -55,5 +56,42 @@ public class AnnonceServiceServer : IAnnonceService
 
     }
 
- 
+    public async Task Update(Annonce annonce)
+    {
+        try
+        {
+            await client.PutAsJsonAsync($"{serverUrl}api/annoncer/{annonce.Id}", annonce);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fejl ved opdatering af annonce: {ex.Message}");
+        }
+    }
+    
+    public async Task<Annonce[]> GetByBuyerId(int buyerId)
+    {
+        try
+        {
+            var response = await client.GetAsync($"{serverUrl}api/annoncer/buyer/{buyerId}");
+        
+            if (!response.IsSuccessStatusCode)
+            {
+                return Array.Empty<Annonce>();
+            }
+        
+            var content = await response.Content.ReadAsStringAsync();
+        
+            var options = new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+        
+            return System.Text.Json.JsonSerializer.Deserialize<Annonce[]>(content, options);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fejl ved hentning af køberens annoncer: {ex.Message}");
+            return Array.Empty<Annonce>();
+        }
+    }
 }

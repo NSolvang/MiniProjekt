@@ -7,5 +7,8 @@ public interface IAnnonceRepository
     void Add(Annonce annonce);
     void DeleteById(string id);
     
-    void Update(Annonce annonce);
+    Task Update(Annonce annonce);
+    
+    Task<Annonce[]> GetByBuyerId(int buyerId);
+
 }
