@@ -12,6 +12,12 @@
 <InputText placeholder="Søg .." @bind-Value="inputWord"></InputText>
 <button @onclick="() => ContainWords(inputWord)">Søg</button>
 
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">
+        @errorMessage
+    </div>
+}
 
 @if (annoncer == null)
 {
@@ -24,7 +30,6 @@ else if (annoncer.Length == 0)
 else
 {
     <table class="table">
-
         <tbody>
         @foreach (var annonce in annoncer)
         {
@@ -33,7 +38,16 @@ else
                     Price: @annonce.Price kr.</td>
                 <td>Description: @annonce.Description</td>
                 <td>Status: @annonce.Status</td>
-                <td><button class="btn-primary" @onclick="() => BuyAnnonce(annonce)">Køb</button></td>
+                <td>
+                    @if (currentUserId != annonce.SellerId && annonce.Status == "Aktiv")
+                    {
+                        <button class="btn-primary" @onclick="() => BuyAnnonce(annonce)">Køb</button>
+                    }
+                    else if (currentUserId == annonce.SellerId)
+                    {
+                        <span class="text-muted">Egen annonce</span>
+                    }
+                </td>
             </tr>
         }
         </tbody>
@@ -42,16 +56,18 @@ else
  
 
 @code {
-
     private Annonce[]? annoncer;
-    
     private string? inputWord;
+    private string errorMessage = "";
+    private int currentUserId = 0;
     
     protected override async Task OnInitializedAsync()
     {
         var loggedIn = await mLogin.GetUserLoggedIn();
         if (loggedIn is null)
             navMan.NavigateTo("/LoginPage/Marked");
+        else
+            currentUserId = loggedIn.Id;
         
         annoncer = await mAnnonce.GetAll();
     }
@@ -80,12 +96,29 @@ else
     
     private async Task BuyAnnonce(Annonce annonce)
     {
+        // Reset error message
+        errorMessage = "";
+        
         // Hent den indloggede bruger
         var loggedInUser = await mLogin.GetUserLoggedIn();
     
         if (loggedInUser is null)
         {
             navMan.NavigateTo("/LoginPage/Marked");
+            return;
+        }
+    
+        // Kontrollér om brugeren forsøger at købe sin egen annonce
+        if (annonce.SellerId == loggedInUser.Id)
+        {
+            errorMessage = "Du kan ikke købe din egen annonce!";
+            return; // Afslut metoden uden at gennemføre købet
+        }
+
+        // Kontrollér om annoncen allerede er solgt
+        if (annonce.Status != "Aktiv")
+        {
+            errorMessage = "Denne annonce er ikke længere til salg!";
             return;
         }
     
@@ -99,9 +132,5 @@ else
     
         // Opdater listen af annoncer
         annoncer = await mAnnonce.GetAll();
-    
-        // Optional: Naviger til Mine køb siden
-        // navMan.NavigateTo("minebuys");
     }
-    
 }
