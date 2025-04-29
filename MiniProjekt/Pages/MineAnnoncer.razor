@@ -28,6 +28,7 @@ else
                 <td>Description: @annonce.Description</td>
                 <td>Status: @annonce.Status</td>
                 <td>Location: @annonce.Locations</td>
+                <td><img class="annonceImg" src="@annonce.Picture" width="150px" height="150px"/></td>
                 <td><button class="btn-primary" @onclick="() => EditAnnonce(annonce)">Rediger</button></td>
                 <td><button class="btn-primary" @onclick="() => DeleteById(annonce)">Slet</button></td>
             </tr>
@@ -54,7 +55,7 @@ else
         User? currentUser = await mLogin.GetUserLoggedIn();
 
         annoncer = await mService.GetAll();
-        annoncer = annoncer.Where(a => a.SellerId == currentUser!.Id && a.Status != "Solgt").ToArray();
+        annoncer = annoncer.Where(a => a.SellerId == currentUser!.Id).ToArray();
     }
 
     private async Task DeleteById(Annonce annonce)

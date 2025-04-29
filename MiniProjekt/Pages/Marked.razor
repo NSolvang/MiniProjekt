@@ -10,8 +10,6 @@
 <InputText placeholder="Søg .." @bind-Value="inputWord"></InputText>
 <button @onclick="() => ContainWords(inputWord)">Søg</button>
 
-<!-- Filter -->
-<h4>Filtrer annoncer</h4>
 <div class="mb-3">
 
     <!-- Dropdown for kategori -->
@@ -27,6 +25,7 @@
         <option value="">Vælg lokation</option>
         <option value="A1">A1</option>
         <option value="B1">B1</option>
+        <option value="C1">C1</option>
     </select>
 
     <label>Minimumspris:</label>
@@ -61,6 +60,7 @@ else
         @foreach (var annonce in annoncer)
         {
             <div class="annonce-card">
+                <td><img class="annonceImg" src="@annonce.Picture" width="150px" height="150px"/></td>
                 <div class="annonce-header">
                     <h3>@annonce.Title</h3>
                     <span class="category">@annonce.Category</span>
@@ -116,16 +116,6 @@ else
         annoncer = wordsContain.ToArray();
     }
     
-    private void NavigateToMineAnnoncer()
-    {
-        navMan.NavigateTo("mineannoncer");
-    }
-    
-    private void NavigateToMineBuys()
-    {
-        navMan.NavigateTo("minebuys");
-    }
-    
     private async Task BuyAnnonce(Annonce annonce)
     {
         errorMessage = "";
@@ -168,7 +158,9 @@ else
 
     private async Task ApplyFilter()
     {
+        annoncer = await mAnnonce.GetAll();
         annoncer = await mAnnonce.GetFiltered(filterCategory, filterMinPrice, filterMaxPrice, filterLocation);
+        annoncer = annoncer.Where(a => a.Status != "Solgt").ToArray();
     }
 
     private async Task ClearFilter()
@@ -177,5 +169,6 @@ else
         filterMinPrice = null;
         filterMaxPrice = null;
         annoncer = await mAnnonce.GetAll();
+        annoncer = annoncer.Where(a => a.Status != "Solgt").ToArray();
     }
 }

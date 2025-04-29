@@ -45,6 +45,11 @@
             }
         </InputSelect>
     </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="Picture">Billede URL</label>
+        <InputTextArea id="Picture" @bind-Value="aAnnonce.Picture" class="form-control" />
+    </div>
     
     <div class="col-12 mb-3">
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -76,7 +81,7 @@
     private async Task HandleSubmit()
     {
         User? currentUser = await mLogin.GetUserLoggedIn();
-        aAnnonce.SellerId = currentUser.Id; // <- Flyttet op før validering
+        aAnnonce.SellerId = currentUser.Id; 
 
         if (!editContext.Validate())
         {

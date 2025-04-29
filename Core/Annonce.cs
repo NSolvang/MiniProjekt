@@ -34,5 +34,7 @@ public class Annonce
     public DateTime? SoldDate { get; set; }
     
     public string Locations { get; set; }
+    
+    public string Picture { get; set; }
 
 }

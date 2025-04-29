@@ -16,6 +16,7 @@ style>
 
 /* Card styling */
 .annonce-card {
+    position: relative;
     background: #ffffff;
     border: 1px solid #1b6ec2;
     border-radius: 20px;
@@ -55,6 +56,18 @@ style>
     color: #666;
     margin-bottom: 10px;
 }
+
+.annonceImg {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 100px; /* Justér størrelsen efter behov */
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 
 .annonce-status, .annonce-location {
     font-size: 0.9rem;
