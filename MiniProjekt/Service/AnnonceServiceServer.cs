@@ -94,4 +94,50 @@ public class AnnonceServiceServer : IAnnonceService
             return Array.Empty<Annonce>();
         }
     }
+    
+    public async Task<Annonce[]> GetFiltered(string? category = null, int? minPrice = null, int? maxPrice = null, string? location = null)
+    {
+        try
+        {
+            // Byg URL med query parametre
+            var queryParams = new List<string>();
+        
+            if (!string.IsNullOrEmpty(category))
+                queryParams.Add($"category={Uri.EscapeDataString(category)}");
+        
+            if (minPrice.HasValue)
+                queryParams.Add($"minPrice={minPrice.Value}");
+        
+            if (maxPrice.HasValue)
+                queryParams.Add($"maxPrice={maxPrice.Value}");
+        
+            if (!string.IsNullOrEmpty(location))
+                queryParams.Add($"location={Uri.EscapeDataString(location)}");
+
+            var queryString = queryParams.Count > 0 ? $"?{string.Join("&", queryParams)}" : "";
+        
+            var response = await client.GetAsync($"{serverUrl}api/annoncer/filtered{queryString}");
+        
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"Fejl ved filtrering af annoncer: {response.StatusCode}");
+                return Array.Empty<Annonce>();
+            }
+        
+            var content = await response.Content.ReadAsStringAsync();
+        
+            var options = new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+        
+            return System.Text.Json.JsonSerializer.Deserialize<Annonce[]>(content, options);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fejl ved filtrering af annoncer: {ex.Message}");
+            return Array.Empty<Annonce>();
+        }
+    }
+
 }

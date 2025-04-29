@@ -11,4 +11,6 @@ public interface IAnnonceRepository
     
     Task<Annonce[]> GetByBuyerId(int buyerId);
 
+    // Opdatering af filtermetoden til at inkludere location
+    Task<Annonce[]> GetFiltered(string? category = null, int? minPrice = null, int? maxPrice = null, string? location = null);
 }

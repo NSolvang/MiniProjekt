@@ -10,6 +10,36 @@
 <InputText placeholder="Søg .." @bind-Value="inputWord"></InputText>
 <button @onclick="() => ContainWords(inputWord)">Søg</button>
 
+<!-- Filter -->
+<h4>Filtrer annoncer</h4>
+<div class="mb-3">
+
+    <!-- Dropdown for kategori -->
+    <select @bind="filterCategory">
+        <option value="">Vælg kategori</option>
+        <option value="Tøj">Tøj</option>
+        <option value="Bolig">Bolig</option>
+        <option value="Elektronik">Elektronik</option>
+    </select>
+
+    <!-- Dropdown for lokation -->
+    <select @bind="filterLocation">
+        <option value="">Vælg lokation</option>
+        <option value="A1">A1</option>
+        <option value="B1">B1</option>
+    </select>
+
+    <label>Minimumspris:</label>
+    <InputNumber @bind-Value="filterMinPrice" class="form-control"/>
+
+    <label>Maksimumspris:</label>
+    <InputNumber @bind-Value="filterMaxPrice" class="form-control"/>
+
+
+    <button class="btn btn-secondary mt-2" @onclick="ApplyFilter">Anvend filter</button>
+    <button class="btn btn-outline-secondary mt-2 ms-2" @onclick="ClearFilter">Nulstil filter</button>
+</div>
+
 @if (!string.IsNullOrEmpty(errorMessage))
 {
     <div class="alert alert-danger">
@@ -128,5 +158,24 @@ else
         annoncer = await mAnnonce.GetAll();
         annoncer = annoncer.Where(a => a.Status != "Solgt").ToArray();
 
+    }
+    //Filter
+    private string? filterCategory;
+    private int? filterMinPrice;
+    private int? filterMaxPrice;
+    private string? filterLocation;
+
+
+    private async Task ApplyFilter()
+    {
+        annoncer = await mAnnonce.GetFiltered(filterCategory, filterMinPrice, filterMaxPrice, filterLocation);
+    }
+
+    private async Task ClearFilter()
+    {
+        filterCategory = null;
+        filterMinPrice = null;
+        filterMaxPrice = null;
+        annoncer = await mAnnonce.GetAll();
     }
 }

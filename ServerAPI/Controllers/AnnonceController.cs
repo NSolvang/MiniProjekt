@@ -56,5 +56,17 @@ namespace ServerAPI.Controllers
             var annoncer = await annonceRepo.GetByBuyerId(buyerId);
             return Ok(annoncer);
         }
+        
+        //filter
+        [HttpGet("filtered")]
+        public async Task<IActionResult> GetFiltered(
+            [FromQuery] string? category = null, 
+            [FromQuery] int? minPrice = null, 
+            [FromQuery] int? maxPrice = null,
+            [FromQuery] string? location = null)
+        {
+            var annoncer = await annonceRepo.GetFiltered(category, minPrice, maxPrice, location);
+            return Ok(annoncer);
+        }
     }
 }
