@@ -7,8 +7,6 @@
 
 <h3>Marked</h3>
 
-<button class="btn-primary" @onclick="NavigateToMineAnnoncer">Mine Annoncer</button>
-<button class="btn-primary" @onclick="NavigateToMineBuys">Mine køb</button>
 <InputText placeholder="Søg .." @bind-Value="inputWord"></InputText>
 <button @onclick="() => ContainWords(inputWord)">Søg</button>
 
@@ -71,11 +69,14 @@ else
             currentUserId = loggedIn.Id;
         
         annoncer = await mAnnonce.GetAll();
+        annoncer = annoncer.Where(a => a.Status != "Solgt").ToArray();
+
     }
     
     private async Task ContainWords(string input)
     {
         annoncer = await mAnnonce.GetAll();
+        annoncer = annoncer.Where(a => a.Status != "Solgt").ToArray();
 
         List<Annonce> wordsContain = new();
         foreach (var x in annoncer)
@@ -125,5 +126,7 @@ else
     
         await mAnnonce.Update(annonce);
         annoncer = await mAnnonce.GetAll();
+        annoncer = annoncer.Where(a => a.Status != "Solgt").ToArray();
+
     }
 }
