@@ -20,7 +20,7 @@
         <label for="Price">Price</label>
         <InputNumber id="Price" @bind-Value="aAnnonce.Price" class="form-control" />
     </div>
-
+ 
     <div class="col-md-12 mb-3">
         <label for="Description">Description</label>
         <InputTextArea id="Description" @bind-Value="aAnnonce.Description" class="form-control" />
@@ -54,11 +54,8 @@
 </EditForm>
 
 @code {
-    private Annonce aAnnonce = new() 
-    { 
-        Category = "Tøj",  // Set a default value
-        Id = ObjectId.GenerateNewId().ToString() // Generate a valid ObjectId
-    };
+    private Annonce aAnnonce = new() { Category = "" }; 
+   
     private string[] options = { "Tøj", "Elektronik", "Bolig"};
     private string[] locations = {"A1","B1","C1"};
     private EditContext editContext; 
@@ -77,16 +74,10 @@
 
         User? currentUser = await mLogin.GetUserLoggedIn();
         aAnnonce.SellerId = currentUser.Id;
-        try
-        {
-            await mAnnonce.Add(aAnnonce);
-            nav.NavigateTo("/MineAnnoncer");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error submitting announcement: {ex.Message}");
-            // Here you could add some UI feedback to the user
-        }
+    
+        await mAnnonce.Add(aAnnonce);
+         
+        nav.NavigateTo("/MineAnnoncer");
     }
 
     private void NavigateToMineAnnoncerPage()
