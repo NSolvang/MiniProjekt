@@ -28,6 +28,7 @@ else
                 <td>Description: @annonce.Description</td>
                 <td>Status: @annonce.Status</td>
                 <td>Location: @annonce.Locations</td>
+                <td><button class="btn-primary" @onclick="() => EditAnnonce(annonce)">Edit</button></td>
                 <td><button class="btn-primary" @onclick="() => DeleteById(annonce)">Delete</button></td>
             </tr>
         }
@@ -68,5 +69,10 @@ else
     private void NavigateToAddAnnoncePage()
     {
         nav.NavigateTo("/AddAnnoncePage");
+    }
+    
+    private void EditAnnonce(Annonce annonce)
+    {
+        nav.NavigateTo($"/EditAnnoncePage/{annonce.Id}");
     }
 }

@@ -1,0 +1,115 @@
+@page "/EditAnnoncePage/{Id}"
+@using Core
+@using MiniProjekt.Service
+@inject NavigationManager nav
+@inject ILoginService mLogin
+@inject IAnnonceService mAnnonce
+
+<h1>Rediger Annonce</h1>
+
+@if (aAnnonce == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm EditContext="@editContext" OnSubmit="@HandleSubmit" class="row p-3">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="col-md-12 mb-3">
+            <label for="Name">Title</label>
+            <InputText id="Name" @bind-Value="aAnnonce.Title" class="form-control" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="Price">Price</label>
+            <InputNumber id="Price" @bind-Value="aAnnonce.Price" class="form-control" />
+        </div>
+
+        <div class="col-md-12 mb-3">
+            <label for="Description">Description</label>
+            <InputTextArea id="Description" @bind-Value="aAnnonce.Description" class="form-control" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="Category">Category</label>
+            <InputSelect id="Category" @bind-Value="aAnnonce.Category" class="form-control">
+                @foreach (var anOption in options)
+                {
+                    <option value="@anOption">@anOption</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="Locations">Location</label>
+            <InputSelect id="Locations" @bind-Value="aAnnonce.Locations" class="form-control">
+                @foreach (var location in locations)
+                {
+                    <option value="@location">@location</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="col-12 mb-3">
+            <button type="submit" class="btn btn-primary">Gem ændringer</button>
+        </div>
+
+        <button class="btn btn-secondary" @onclick="NavigateToMineAnnoncerPage">Annuller</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private Annonce aAnnonce;
+    private string[] options = { "Tøj", "Elektronik", "Bolig" };
+    private string[] statusOptions = { "Aktiv", "Solgt", "Reserveret" };
+    private string[] locations = {"A1","B1","C1"};
+    private EditContext editContext;
+
+    protected override async Task OnInitializedAsync()
+    {
+        User? currentUser = await mLogin.GetUserLoggedIn();
+        if (currentUser == null)
+            nav.NavigateTo("/login");
+
+        // Hent alle annoncer og find den rigtige ved ID
+        var allAnnoncer = await mAnnonce.GetAll();
+        aAnnonce = allAnnoncer.FirstOrDefault(a => a.Id == Id);
+        
+        if (aAnnonce == null)
+        {
+            // Hvis annoncen ikke blev fundet
+            nav.NavigateTo("/MineAnnoncer");
+            return;
+        }
+        
+        // Kontroller at brugeren er ejeren af annoncen
+        if (aAnnonce.SellerId != currentUser.Id)
+        {
+            nav.NavigateTo("/MineAnnoncer");
+            return;
+        }
+
+        editContext = new EditContext(aAnnonce);
+    }
+
+    private async Task HandleSubmit()
+    {
+        if (!editContext.Validate())
+        {
+            return;
+        }
+
+        await mAnnonce.Update(aAnnonce);
+        nav.NavigateTo("/MineAnnoncer");
+    }
+
+    private void NavigateToMineAnnoncerPage()
+    {
+        nav.NavigateTo("/MineAnnoncer");
+    }
+}
