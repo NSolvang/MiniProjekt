@@ -1,7 +1,7 @@
 @page "/AddAnnoncePage"
 @using Core
 @using MiniProjekt.Service
-@using Core
+@using MongoDB.Bson
 @inject NavigationManager nav
 @inject ILoginService mLogin
 @inject IAnnonceService mAnnonce
@@ -54,7 +54,11 @@
 </EditForm>
 
 @code {
-    private Annonce aAnnonce = new() { Category = ""};
+    private Annonce aAnnonce = new() 
+    { 
+        Category = "Tøj",  // Set a default value
+        Id = ObjectId.GenerateNewId().ToString() // Generate a valid ObjectId
+    };
     private string[] options = { "Tøj", "Elektronik", "Bolig"};
     private string[] locations = {"A1","B1","C1"};
     private EditContext editContext; 
@@ -73,9 +77,16 @@
 
         User? currentUser = await mLogin.GetUserLoggedIn();
         aAnnonce.SellerId = currentUser.Id;
-        await mAnnonce.Add(aAnnonce);
-        
-        nav.NavigateTo("/MineAnnoncer");
+        try
+        {
+            await mAnnonce.Add(aAnnonce);
+            nav.NavigateTo("/MineAnnoncer");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error submitting announcement: {ex.Message}");
+            // Here you could add some UI feedback to the user
+        }
     }
 
     private void NavigateToMineAnnoncerPage()

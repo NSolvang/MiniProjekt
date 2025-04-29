@@ -1,0 +1,210 @@
+  /* ===== VINTAGE HEADER STYLES ===== */
+.Forside {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.Forside::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: #f5e8d0;
+    z-index: -1;
+    transform: skewY(-3deg);
+    transform-origin: top left;
+}
+
+.Forside h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    color: #0e0e0e;
+    margin: 0 0 30px 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    letter-spacing: 1px;
+    position: relative;
+    display: inline-block;
+}
+
+.Forside h1::after {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: #8b7355;
+}
+
+.Forside img {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    border: 8px solid white;
+    filter: sepia(0.1) contrast(1.05) brightness(0.95);
+    transition: transform 0.3s ease;
+}
+
+.Forside img:hover {
+    transform: scale(1.02);
+    filter: sepia(0.2) contrast(1.1) brightness(1);
+}
+
+/* ===== REST OF YOUR EXISTING STYLES ===== */
+.hero-section {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    padding: 40px 20px;
+}
+
+/* ... (keep all your existing card styles) ... */
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+@media (max-width: 768px) {
+    .Forside h1 {
+        font-size: 2.5rem;
+    }
+
+    .Forside img {
+        max-width: 100%;
+        border-width: 4px;
+    }
+
+}
+
+
+/* ===== MAIN STYLES ===== */
+.hero-section {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    padding: 40px 20px;
+}
+
+.card-container {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.card {
+    position: relative;
+    list-style: none;
+    width: 220px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 20px; /* Added to parent card */
+    overflow: hidden; /* Ensures child elements respect border-radius */
+}
+
+.card:before {
+    content: "";
+    display: block;
+    padding-bottom: 150%;
+    width: 100%;
+}
+
+.card-background {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+    border-radius: 20px; /* Kept for backup */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(0.9) saturate(1) contrast(1);
+    transition: 0.3s ease;
+    will-change: transform;
+}
+
+/* ===== HOVER EFFECTS ===== */
+.card-container:hover .card:not(:hover) {
+    transform: scale(0.95);
+}
+
+.card-container:hover .card:not(:hover) .card-background {
+    filter: brightness(0.6) saturate(0.8) contrast(1.2) blur(2px);
+}
+
+.card:hover {
+    transform: scale(1.05) translateY(-10px);
+    z-index: 2;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card:hover .card-background {
+    filter: brightness(1) saturate(1.1) contrast(1.1);
+}
+
+/* ===== CARD CONTENT ===== */
+.content {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.9;
+    transition: 0.3s ease;
+}
+
+.card:hover .content {
+    opacity: 1;
+    transform: translateY(-5px);
+}
+
+/* ===== "THANKS" MESSAGE ===== */
+.thanks-message {
+    text-align: center;
+    margin-top: 40px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    font-size: 18px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+@media (max-width: 768px) {
+    .card {
+        width: 160px;
+        border-radius: 16px; /* Slightly smaller radius for mobile */
+    }
+    .card-background {
+        border-radius: 16px; /* Match parent */
+    }
+    .card-container {
+        gap: 15px;
+    }
+    .card:hover {
+        transform: scale(1.03) translateY(-5px);
+    }
+}  

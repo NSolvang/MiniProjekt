@@ -29,32 +29,32 @@ else if (annoncer.Length == 0)
 }
 else
 {
-    <table class="table">
-        <tbody>
+    <div class="annonce-grid">
         @foreach (var annonce in annoncer)
         {
-            <tr>
-                <td><h2>@annonce.Title - @annonce.Category</h2><br />
-                    Price: @annonce.Price kr.</td>
-                <td>Description: @annonce.Description</td>
-                <td>Status: @annonce.Status</td>
-                <td>Location: @annonce.Locations</td>
-                <td>
-                    @if (currentUserId != annonce.SellerId && annonce.Status == "Aktiv")
-                    {
-                        <button class="btn-primary" @onclick="() => BuyAnnonce(annonce)">Køb</button>
-                    }
-                    else if (currentUserId == annonce.SellerId)
-                    {
-                        <span class="text-muted">Egen annonce</span>
-                    }
-                </td>
-            </tr>
+            <div class="annonce-card">
+                <div class="annonce-header">
+                    <h3>@annonce.Title</h3>
+                    <span class="category">@annonce.Category</span>
+                </div>
+                <div class="annonce-price">@annonce.Price kr.</div>
+                <div class="annonce-description">@annonce.Description</div>
+                <div class="annonce-details">
+                    <span class="status">Status: @annonce.Status</span>
+                    <span class="location">Lokation: @annonce.Locations</span>
+                </div>
+                @if (currentUserId != annonce.SellerId && annonce.Status == "Aktiv")
+                {
+                    <button class="btn-primary buy-btn" @onclick="() => BuyAnnonce(annonce)">Køb</button>
+                }
+                else if (currentUserId == annonce.SellerId)
+                {
+                    <span class="text-muted own-annonce">Egen annonce</span>
+                }
+            </div>
         }
-        </tbody>
-    </table>
+    </div>
 }
- 
 
 @code {
     private Annonce[]? annoncer;
@@ -97,10 +97,8 @@ else
     
     private async Task BuyAnnonce(Annonce annonce)
     {
-        // Reset error message
         errorMessage = "";
         
-        // Hent den indloggede bruger
         var loggedInUser = await mLogin.GetUserLoggedIn();
     
         if (loggedInUser is null)
@@ -109,29 +107,23 @@ else
             return;
         }
     
-        // Kontrollér om brugeren forsøger at købe sin egen annonce
         if (annonce.SellerId == loggedInUser.Id)
         {
             errorMessage = "Du kan ikke købe din egen annonce!";
-            return; // Afslut metoden uden at gennemføre købet
+            return;
         }
 
-        // Kontrollér om annoncen allerede er solgt
         if (annonce.Status != "Aktiv")
         {
             errorMessage = "Denne annonce er ikke længere til salg!";
             return;
         }
     
-        // Opdater annoncen med køber-id, status og salgsdato
         annonce.BuyerId = loggedInUser.Id;
         annonce.Status = "Solgt";
         annonce.SoldDate = DateTime.Now;
     
-        // Gem de opdaterede oplysninger
         await mAnnonce.Update(annonce);
-    
-        // Opdater listen af annoncer
         annoncer = await mAnnonce.GetAll();
     }
 }

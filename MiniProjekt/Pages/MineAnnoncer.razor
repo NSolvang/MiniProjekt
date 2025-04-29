@@ -37,9 +37,6 @@ else
     <button class="btn-primary" @onclick="NavigateToAddAnnoncePage">Tilføj Annonce</button>
 }
 
-
-
-
 @code {
 
     private Annonce[]? annoncer;
@@ -75,4 +72,5 @@ else
     {
         nav.NavigateTo($"/EditAnnoncePage/{annonce.Id}");
     }
+}
 }
