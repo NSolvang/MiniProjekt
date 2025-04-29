@@ -168,6 +168,7 @@ else
         filterCategory = null;
         filterMinPrice = null;
         filterMaxPrice = null;
+        filterLocation = null;
         annoncer = await mAnnonce.GetAll();
         annoncer = annoncer.Where(a => a.Status != "Solgt").ToArray();
     }

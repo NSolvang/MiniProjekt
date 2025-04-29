@@ -22,15 +22,30 @@ else
         <tbody>
         @foreach (var annonce in annoncer)
         {
-            <tr class="bikeRow">
-                <td><h2>@annonce.Title - @annonce.Category</h2><br />
-                    Price: @annonce.Price kr.</td>
-                <td>Description: @annonce.Description</td>
-                <td>Status: @annonce.Status</td>
-                <td>Location: @annonce.Locations</td>
+            <tr class="annonceRow">
+                <td>
+                    <h2>@annonce.Title - @annonce.Category</h2>
+                    <p><strong>Pris:</strong> @annonce.Price kr.</p>
+                </td>
+                <td>
+                    <p><strong>Beskrivelse:</strong> @annonce.Description</p>
+                </td>
+                <td>
+                    <span class="status @(annonce.Status == "Aktiv" ? "green" : annonce.Status == "Solgt" ? "red" : "")">
+                      @annonce.Status
+                     </span>
+                </td>
+                <td>Lokation: @annonce.Locations</td>
                 <td><img class="annonceImg" src="@annonce.Picture" width="150px" height="150px"/></td>
-                <td><button class="btn-primary" @onclick="() => EditAnnonce(annonce)">Rediger</button></td>
-                <td><button class="btn-primary" @onclick="() => DeleteById(annonce)">Slet</button></td>
+                @if (annonce.Status == "Aktiv")
+                {
+                    <td>
+                        <button class="btn edit-btn" @onclick="() => EditAnnonce(annonce)">Rediger</button>
+                    </td>
+                    <td>
+                        <button class="btn delete-btn" @onclick="() => DeleteById(annonce)">Slet</button>
+                    </td>
+                }
             </tr>
         }
         </tbody>

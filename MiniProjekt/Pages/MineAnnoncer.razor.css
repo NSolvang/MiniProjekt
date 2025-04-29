@@ -70,11 +70,91 @@
 .btn-danger:hover {
     background-color: #c82333;
 }
-.Sogt
+
+td {
+    padding: 15px;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+td h2 {
+    font-size: 20px;
+    margin: 0;
+    color: #333;
+}
+
+td p {
+    margin: 5px 0;
+    color: #555;
+}
+
 
 .annonceImg{
     max-width:200px;
     max-height: 200px;
     border-radius: 20px;
     background-color:lightgray;
+    object-fit: cover;
+    margin-top: 5px;
 }
+
+.status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+}
+
+.status.green {
+    background-color: green;
+}
+
+.status.red {
+    background-color: red;
+}
+
+.btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #0056b3;
+}
+
+.delete-btn {
+    background-color: red;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: darkred;
+}
+
+.annonceRow {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+    display: table-row;
+}
+
+.annonceRow:hover {
+    background-color: #f9f9f9;
+}
+
+
+
+

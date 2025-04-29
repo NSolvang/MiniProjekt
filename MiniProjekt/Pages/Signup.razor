@@ -1,5 +1,4 @@
 @page "/Sign"
-@using MiniProjekt.Logic
 @using MiniProjekt.Service
 @using Core
 @inject NavigationManager navManager
@@ -14,7 +13,7 @@
             <p>Choose your username and password</p>
         </div>
 
-        <EditForm Model="@createUserDto" OnValidSubmit="@HandleValidSubmit">
+        <EditForm Model="@createUser" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
             <ValidationSummary />
 
@@ -22,19 +21,19 @@
                 <label>Username</label>
                 <div class="input-with-icon">
                     <i class="fas fa-user"></i>
-                    <InputText class="form-control" @bind-Value="createUserDto.Username" placeholder="Choose a username" />
+                    <InputText class="form-control" @bind-Value="createUser.Username" placeholder="Choose a username" />
                 </div>
-                <ValidationMessage For="@(() => createUserDto.Username)" />
+                <ValidationMessage For="@(() => createUser.Username)" />
             </div>
 
             <div class="form-group">
                 <label>Password</label>
                 <div class="input-with-icon">
                     <i class="fas fa-lock"></i>
-                    <InputText class="form-control" type="password" @bind-Value="createUserDto.Password" 
+                    <InputText class="form-control" type="password" @bind-Value="createUser.Password" 
                                 placeholder="••••••••" />
                 </div>
-                <ValidationMessage For="@(() => createUserDto.Password)" />
+                <ValidationMessage For="@(() => createUser.Password)" />
                 <div class="password-hint">
                     Password must be between 8-10 characters
                 </div>
@@ -44,10 +43,10 @@
                 <label>Confirm Password</label>
                 <div class="input-with-icon">
                     <i class="fas fa-lock"></i>
-                    <InputText class="form-control" type="password" @bind-Value="createUserDto.ConfirmPassword" 
+                    <InputText class="form-control" type="password" @bind-Value="createUser.ConfirmPassword" 
                                 placeholder="••••••••" />
                 </div>
-                <ValidationMessage For="@(() => createUserDto.ConfirmPassword)" />
+                <ValidationMessage For="@(() => createUser.ConfirmPassword)" />
             </div>
 
             <button type="submit" class="signup-button" disabled="@isProcessing">
@@ -84,7 +83,7 @@
 </div>
 
 @code {
-    private CreateUserDto createUserDto = new CreateUserDto();
+    private User createUser = new User();
     private string errorMessage = "";
     private string successMessage = "";
     private bool isProcessing = false;
@@ -98,7 +97,7 @@
         try
         {
             // Validate passwords match
-            if (createUserDto.Password != createUserDto.ConfirmPassword)
+            if (createUser.Password != createUser.ConfirmPassword)
             {
                 errorMessage = "Passwords do not match";
                 isProcessing = false;
@@ -107,15 +106,15 @@
             
             var user = new User
             {
-                Username = createUserDto.Username,
-                Password = createUserDto.Password
+                Username = createUser.Username,
+                Password = createUser.Password
             };
 
             await loginService.AddUser(user);
             successMessage = "Account created successfully!";
             
             // Reset form
-            createUserDto = new CreateUserDto();
+            createUser = new User();
             
             // Optional: Redirect after successful creation
             await Task.Delay(2000);
