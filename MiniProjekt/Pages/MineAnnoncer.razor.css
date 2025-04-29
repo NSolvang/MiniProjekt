@@ -1,3 +1,25 @@
+.filter-buttons {
+    display: flex;
+    justify-content: center;  
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+
+.filter-btn {
+    padding: 8px 16px;
+    background-color: #eee;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-btn:hover {
+    background-color: #ddd;
+}
+
 .product-list-container {
     padding: 20px;
     max-width: 1200px;

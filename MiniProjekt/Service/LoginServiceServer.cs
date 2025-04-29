@@ -60,7 +60,25 @@ public class LoginServiceServer : ILoginService
     {
         await client.PostAsJsonAsync($"{serverUrl}api/User", user);
     }
-    
+
+    public async Task LogOut()
+    {
+        try
+        {
+            await localStorage.RemoveItemAsync("user");
+
+            var response = await client.PostAsync($"{serverUrl}api/User/logout", null);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Logout failed on the server side.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Logout error: {ex.Message}");
+        }
+    }
 }
 
 

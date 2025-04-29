@@ -6,6 +6,13 @@
 @inject ILoginService mLogin
 <h3>Mine Annoncer</h3>
 
+<div class="filter-buttons">
+    <button class="filter-btn" @onclick="ShowSold">Vis kun solgte</button>
+    <button class="filter-btn" @onclick="ShowActive">Vis kun aktive</button>
+    <button class="filter-btn" @onclick="ShowAll">Vis alle</button>
+</div>
+
+
 @if (annoncer == null)
 {
     <p><em>Loading...</em></p>
@@ -60,8 +67,13 @@ else
     protected override async Task OnInitializedAsync()
     {
         User? currentUser = await mLogin.GetUserLoggedIn();
+
         if (currentUser == null)
-            nav.NavigateTo("/login");
+        {
+            nav.NavigateTo("/LoginPage");
+            return; 
+        }
+
         await LoadAll();
     }
 
@@ -88,5 +100,30 @@ else
     {
         nav.NavigateTo($"/EditAnnoncePage/{annonce.Id}");
     }
+
+    private async Task ShowActive()
+    {
+        User? currentUser = await mLogin.GetUserLoggedIn();
+
+        annoncer = await mService.GetAll();
+        annoncer = annoncer.Where(a => a.Status == "Aktiv" && a.SellerId == currentUser!.Id ).ToArray();
+    }
     
+    private async Task ShowSold()
+    {
+        User? currentUser = await mLogin.GetUserLoggedIn();
+
+        annoncer = await mService.GetAll();
+        annoncer = annoncer.Where(a => a.Status == "Solgt" && a.SellerId == currentUser!.Id ).ToArray();
+    }
+
+
+    private async Task ShowAll()
+    {
+        User? currentUser = await mLogin.GetUserLoggedIn();
+
+        annoncer = await mService.GetAll();
+        annoncer = annoncer.Where(a => a.SellerId == currentUser!.Id ).ToArray();
+    }
+
 }

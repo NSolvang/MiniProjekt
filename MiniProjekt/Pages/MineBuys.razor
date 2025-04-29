@@ -45,22 +45,21 @@ else
     
     protected override async Task OnInitializedAsync()
     {
-        User? currentUser = await mLogin.GetUserLoggedIn();
-
         var loggedIn = await mLogin.GetUserLoggedIn();
         if (loggedIn is null)
         {
-            nav.NavigateTo("/LoginPage/MineBuys");
+            nav.NavigateTo("/LoginPage");
         }
         else
         {
-            currentUserId = loggedIn.Id.ToString(); // Eller en tilsvarende ID-egenskab
-        }
-        
-        myPurchases = await mService.GetAll();
-        myPurchases = myPurchases.Where(a => a.BuyerId == currentUser!.Id).ToArray();
+            currentUserId = loggedIn.Id.ToString();
 
+            myPurchases = await mService.GetAll();
+        
+            myPurchases = myPurchases.Where(a => a.BuyerId != null && a.BuyerId == loggedIn.Id).ToArray();
+        }
     }
+
     
     
  
