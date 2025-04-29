@@ -32,5 +32,7 @@ public class Annonce
     public int? BuyerId { get; set; } // Nullable fordi det måske ikke er solgt endnu
     
     public DateTime? SoldDate { get; set; }
+    
+    public string Locations { get; set; }
 
 }

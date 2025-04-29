@@ -35,6 +35,16 @@
             }
         </InputSelect>
     </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="Locations">Location</label>
+        <InputSelect id="Locations" @bind-Value="aAnnonce.Locations" class="form-control">
+            @foreach (var location in locations)
+            {
+                <option value="@location">@location</option>
+            }
+        </InputSelect>
+    </div>
     
     <div class="col-12 mb-3">
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -46,6 +56,7 @@
 @code {
     private Annonce aAnnonce = new() { Category = ""};
     private string[] options = { "Tøj", "Elektronik", "Bolig"};
+    private string[] locations = {"A1","B1","C1"};
     private EditContext editContext; 
 
     protected override void OnInitialized()
