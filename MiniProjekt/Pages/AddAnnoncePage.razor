@@ -54,11 +54,19 @@
 </EditForm>
 
 @code {
-    private Annonce aAnnonce = new() { Category = "" }; 
-   
-    private string[] options = { "Tøj", "Elektronik", "Bolig"};
-    private string[] locations = {"A1","B1","C1"};
-    private EditContext editContext; 
+    private Annonce aAnnonce = new()
+    {
+        Title = "",
+        Description = "",
+        Price = 1,
+        Category = "",
+        Locations = "",
+        Status = "Aktiv"
+    };
+
+    private string[] options = { "Tøj", "Elektronik", "Bolig" };
+    private string[] locations = { "A1", "B1", "C1" };
+    private EditContext editContext;
 
     protected override void OnInitialized()
     {
@@ -67,16 +75,15 @@
 
     private async Task HandleSubmit()
     {
-        if (!editContext.Validate()) 
+        User? currentUser = await mLogin.GetUserLoggedIn();
+        aAnnonce.SellerId = currentUser.Id; // <- Flyttet op før validering
+
+        if (!editContext.Validate())
         {
-            return; 
+            return;
         }
 
-        User? currentUser = await mLogin.GetUserLoggedIn();
-        aAnnonce.SellerId = currentUser.Id;
-    
         await mAnnonce.Add(aAnnonce);
-         
         nav.NavigateTo("/MineAnnoncer");
     }
 
