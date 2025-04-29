@@ -67,4 +67,35 @@ public class AnnonceRepositoryMongoDB : IAnnonceRepository
         var result = await annonceCollection.Find(x => x.BuyerId == buyerId).ToListAsync();
         return result.ToArray();
     }
+    
+    //filter
+    public async Task<Annonce[]> GetFiltered(string? category = null, int? minPrice = null, int? maxPrice = null, string? location = null)
+    {
+        var builder = Builders<Annonce>.Filter;
+        var filter = builder.Empty;
+
+        // Tilføj filtrering baseret på de parametre, der er angivet
+        if (!string.IsNullOrEmpty(category))
+        {
+            filter = filter & builder.Eq(a => a.Category, category);
+        }
+
+        if (minPrice.HasValue)
+        {
+            filter = filter & builder.Gte(a => a.Price, minPrice.Value);
+        }
+
+        if (maxPrice.HasValue)
+        {
+            filter = filter & builder.Lte(a => a.Price, maxPrice.Value);
+        }
+
+        if (!string.IsNullOrEmpty(location))
+        {
+            filter = filter & builder.Eq(a => a.Locations, location);
+        }
+
+        var result = await annonceCollection.Find(filter).ToListAsync();
+        return result.ToArray();
+    }
 }
