@@ -54,7 +54,7 @@ else
         User? currentUser = await mLogin.GetUserLoggedIn();
 
         annoncer = await mService.GetAll();
-        annoncer = annoncer.Where(a => a.SellerId == currentUser!.Id).ToArray();
+        annoncer = annoncer.Where(a => a.SellerId == currentUser!.Id && a.Status != "Solgt").ToArray();
     }
 
     private async Task DeleteById(Annonce annonce)
