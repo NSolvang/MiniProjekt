@@ -343,7 +343,7 @@ h1 {
 .annonce-card:hover .annonceImg {
     transform: scale(1.02);
 }
-
+ 
 .annonce-description {
     font-size: 0.95rem;
     color: #0e0e0e;
