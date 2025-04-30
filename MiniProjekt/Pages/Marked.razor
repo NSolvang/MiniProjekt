@@ -5,38 +5,44 @@
 @inject ILoginService mLogin
 @inject IAnnonceService mAnnonce
 
-<h3>Marked</h3>
+@implements IDisposable
 
-<InputText placeholder="Søg .." @bind-Value="inputWord"></InputText>
-<button @onclick="() => ContainWords(inputWord)">Søg</button>
+<h1>Marked</h1>
 
-<div class="mb-3">
+<div class="search-group">
+    <InputText class="search-box" placeholder="Søg .." @bind-Value="inputWord" />
+    <button class="btn btn-primary" @onclick="() => ContainWords(inputWord)">Søg</button>
+</div>
 
-    <!-- Dropdown for kategori -->
-    <select @bind="filterCategory">
-        <option value="">Vælg kategori</option>
-        <option value="Tøj">Tøj</option>
-        <option value="Bolig">Bolig</option>
-        <option value="Elektronik">Elektronik</option>
-    </select>
+<div class="search-filter-container">
+    <div class="filter-group">
+        <select @bind="filterCategory">
+            <option value="">Vælg kategori</option>
+            <option value="Tøj">Tøj</option>
+            <option value="Bolig">Bolig</option>
+            <option value="Elektronik">Elektronik</option>
+        </select>
 
-    <!-- Dropdown for lokation -->
-    <select @bind="filterLocation">
-        <option value="">Vælg lokation</option>
-        <option value="A1">A1</option>
-        <option value="B1">B1</option>
-        <option value="C1">C1</option>
-    </select>
+        <select @bind="filterLocation">
+            <option value="">Vælg lokation</option>
+            <option value="A1">A1</option>
+            <option value="B1">B1</option>
+            <option value="C1">C1</option>
+        </select>
 
-    <label>Minimumspris:</label>
-    <InputNumber @bind-Value="filterMinPrice" class="form-control"/>
+        <div class="price-filters">
+            <label>Minimumspris:</label>
+            <InputNumber @bind-Value="filterMinPrice" class="form-control" />
 
-    <label>Maksimumspris:</label>
-    <InputNumber @bind-Value="filterMaxPrice" class="form-control"/>
+            <label>Maksimumspris:</label>
+            <InputNumber @bind-Value="filterMaxPrice" class="form-control" />
+        </div>
 
-
-    <button class="btn btn-secondary mt-2" @onclick="ApplyFilter">Anvend filter</button>
-    <button class="btn btn-outline-secondary mt-2 ms-2" @onclick="ClearFilter">Nulstil filter</button>
+        <div class="filter-buttons">
+            <button class="btn btn-secondary" @onclick="ApplyFilter">Anvend filter</button>
+            <button class="btn btn-outline-secondary" @onclick="ClearFilter">Nulstil filter</button>
+        </div>
+    </div>
 </div>
 
 @if (!string.IsNullOrEmpty(errorMessage))
@@ -89,6 +95,10 @@ else
     private string? inputWord;
     private string errorMessage = "";
     private int currentUserId = 0;
+    private string? filterCategory;
+    private int? filterMinPrice;
+    private int? filterMaxPrice;
+    private string? filterLocation;
     
     protected override async Task OnInitializedAsync()
     {
@@ -98,9 +108,40 @@ else
         else
             currentUserId = loggedIn.Id;
         
-        annoncer = await mAnnonce.GetAll();
-        annoncer = annoncer.Where(a => a.Status != "Solgt").ToArray();
+        // Tilføj event listener for URL ændringer
+        navMan.LocationChanged += HandleLocationChanged;
+        
+        // Indlæs annoncer baseret på query parametre
+        await LoadAnnoncer();
+    }
 
+    private async Task LoadAnnoncer()
+    {
+        var uri = new Uri(navMan.Uri);
+        var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        
+        var categoryFromUrl = query["category"];
+        if (!string.IsNullOrEmpty(categoryFromUrl))
+        {
+            filterCategory = categoryFromUrl;
+            await ApplyFilter();
+        }
+        else
+        {
+            annoncer = await mAnnonce.GetAll();
+            annoncer = annoncer.Where(a => a.Status != "Solgt").ToArray();
+        }
+    }
+
+    private async void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        await LoadAnnoncer();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        navMan.LocationChanged -= HandleLocationChanged;
     }
     
     private async Task ContainWords(string input)
@@ -147,18 +188,10 @@ else
         await mAnnonce.Update(annonce);
         annoncer = await mAnnonce.GetAll();
         annoncer = annoncer.Where(a => a.Status != "Solgt").ToArray();
-
     }
-    //Filter
-    private string? filterCategory;
-    private int? filterMinPrice;
-    private int? filterMaxPrice;
-    private string? filterLocation;
-
 
     private async Task ApplyFilter()
     {
-        annoncer = await mAnnonce.GetAll();
         annoncer = await mAnnonce.GetFiltered(filterCategory, filterMinPrice, filterMaxPrice, filterLocation);
         annoncer = annoncer.Where(a => a.Status != "Solgt").ToArray();
     }

@@ -1,4 +1,8 @@
 ﻿@page "/"
+@using Core
+@using MiniProjekt.Service
+@inject NavigationManager NavManager
+@inject IAnnonceService mAnnonce
 
 <PageTitle>Home</PageTitle>
 
@@ -10,21 +14,21 @@
 <section class="hero-section">
     <h1>Category</h1>
     <div class="card-container">
-        <div class="card">
+        <div class="card" @onclick='() => NavigateToFilteredMarket("Bolig")'>
             <div class="card-background" style="background-image: url('https://images.squarespace-cdn.com/content/v1/6435747abcc5c74ade6a0d12/a1e97397-da23-4fc9-a19a-81767009c0c9/2023_05_15_EskerChairScene6_Camera_4_0090.jpg');"></div>
             <div class="content">
                 <h3 class="card-heading">Bolig</h3>
             </div>
         </div>
 
-        <div class="card">
+        <div class="card" @onclick='() => NavigateToFilteredMarket("Tøj")'>
             <div class="card-background" style="background-image: url('https://9b16f79ca967fd0708d1-2713572fef44aa49ec323e813b06d2d9.ssl.cf2.rackcdn.com/1140x_a10-7_cTC/Unisex-denim-by-H-M-1568836703.jpg');"></div>
             <div class="content">
                 <h3 class="card-heading">Clothes</h3>
             </div>
         </div>
 
-        <div class="card">
+        <div class="card" @onclick='() => NavigateToFilteredMarket("Elektronik")'>
             <div class="card-background" style="background-image: url('https://www.apple.com/newsroom/images/2024/09/apple-debuts-iphone-16-pro-and-iphone-16-pro-max/article/Apple-iPhone-16-Pro-hero-geo-240909_inline.jpg.large.jpg');"></div>
             <div class="content">
                 <h3 class="card-heading">Elektronik</h3>
@@ -32,3 +36,89 @@
         </div>
     </div>
 </section>
+
+<!-- Tilføjelse: Autorulle med tilfældige opslag -->
+<section class="random-listings">
+    <h2>Tilfældige annoncer</h2>
+    <div class="listing-scroller-container">
+        <div class="listing-scroller">
+            @if (randomListings != null)
+            {
+                @foreach (var annonce in randomListings)
+                {
+                    <div class="annonce-card" @onclick='() => NavigateToAnnonce()'>
+                        <div class="annonce-img-container">
+                            <img class="annonceImg" src="@annonce.Picture" alt="@annonce.Title"/>
+                        </div>
+                        <div class="annonce-content">
+                            <div class="annonce-header">
+                                <h3>@annonce.Title</h3>
+                                <span class="category">@annonce.Category</span>
+                            </div>
+                            <div class="annonce-price">@annonce.Price.ToString("N0") kr.</div>
+                            <div class="annonce-description">@annonce.Description</div>
+                            <div class="annonce-details">
+                                <span class="status @annonce.Status.ToLower()">@annonce.Status</span>
+                                <span class="location">@annonce.Locations</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <!-- Duplicate items for seamless looping -->
+                @foreach (var annonce in randomListings)
+                {
+                    <div class="annonce-card" @onclick='() => NavigateToAnnonce()'>
+                        <div class="annonce-img-container">
+                            <img class="annonceImg" src="@annonce.Picture" alt="@annonce.Title"/>
+                        </div>
+                        <div class="annonce-content">
+                            <div class="annonce-header">
+                                <h3>@annonce.Title</h3>
+                                <span class="category">@annonce.Category</span>
+                            </div>
+                            <div class="annonce-price">@annonce.Price.ToString("N0") kr.</div>
+                            <div class="annonce-description">@annonce.Description</div>
+                            <div class="annonce-details">
+                                <span class="status @annonce.Status.ToLower()">@annonce.Status</span>
+                                <span class="location">@annonce.Locations</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Indlæser annoncer...</p>
+            }
+        </div>
+    </div>
+</section>
+
+
+@code {
+    private Annonce[] randomListings;
+    private string currentUserId; // You'll need to set this with the actual user ID
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var annoncer = await mAnnonce.GetAll();
+        annoncer = annoncer.Where(a => a.Status != "Solgt").ToArray();
+        randomListings = GetRandomItems(annoncer, 10).ToArray();
+    }
+    
+    private IEnumerable<T> GetRandomItems<T>(IEnumerable<T> source, int count)
+    {
+        var rng = new Random();
+        return source.OrderBy(x => rng.Next()).Take(count);
+    }
+    
+    private void NavigateToFilteredMarket(string category)
+    {
+        NavManager.NavigateTo($"/Marked?category={Uri.EscapeDataString(category)}");
+    }
+    
+    private void NavigateToAnnonce()
+    {
+        NavManager.NavigateTo("/Marked");
+    }
+}

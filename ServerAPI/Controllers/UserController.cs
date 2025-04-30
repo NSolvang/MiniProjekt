@@ -10,39 +10,41 @@ namespace WebApplication4.Controllers
     {
         private readonly IUserRepository _repository;
 
-        public UserController(IUserRepository repository)
-        {
-            _repository = repository;
-        }
-
-        [HttpGet("{id}")]
-        public ActionResult<User> GetUserById(int id)
-        {
-            var user = _repository.GetUserById(id);
-            if (user == null) return NotFound("User not found");
-            return Ok(user);
-        }
+        public UserController(IUserRepository repository) => _repository = repository;
 
         [HttpPost("login")]
         public ActionResult<User> Login([FromBody] LoginRequest request)
         {
             var user = _repository.GetUser(request.Username, request.Password);
-            if (user == null) return NotFound("Invalid credentials");
-            return Ok(user);
+            return user != null ? Ok(user) : Unauthorized();
         }
 
-        [HttpPost]
-        public ActionResult<User> AddUser([FromBody] User user)
+        [HttpPost("register")]
+        public IActionResult AddUser([FromBody] User user)
         {
-            _repository.AddUser(user);
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
+            try
+            {
+                if (string.IsNullOrEmpty(user.Username) || string.IsNullOrEmpty(user.Password))
+                {
+                    return BadRequest("Brugernavn og adgangskode er påkrævet");
+                }
+
+                _repository.AddUser(user);
+                return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        [HttpGet("{id}")]
+        public ActionResult<User> GetUserById(int id)
+        {
+            var user = _repository.GetUserById(id);
+            return user != null ? Ok(user) : NotFound();
         }
     }
 
-    public class LoginRequest
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
-    
+    public record LoginRequest(string Username, string Password);
 }

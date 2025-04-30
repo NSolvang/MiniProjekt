@@ -39,16 +39,6 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Confirm Password</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-lock"></i>
-                    <InputText class="form-control" type="password" @bind-Value="createUser.ConfirmPassword" 
-                                placeholder="••••••••" />
-                </div>
-                <ValidationMessage For="@(() => createUser.ConfirmPassword)" />
-            </div>
-
             <button type="submit" class="signup-button" disabled="@isProcessing">
                 @if (isProcessing)
                 {
@@ -96,33 +86,23 @@
         
         try
         {
-            // Validate passwords match
-            if (createUser.Password != createUser.ConfirmPassword)
-            {
-                errorMessage = "Passwords do not match";
-                isProcessing = false;
-                return;
-            }
-            
-            var user = new User
-            {
-                Username = createUser.Username,
-                Password = createUser.Password
-            };
-
-            await loginService.AddUser(user);
+            await loginService.AddUser(createUser);
             successMessage = "Account created successfully!";
             
-            // Reset form
-            createUser = new User();
-            
-            // Optional: Redirect after successful creation
+            // Redirect after successful creation with a short delay
             await Task.Delay(2000);
             navManager.NavigateTo("/LoginPage/Marked");
         }
         catch (Exception ex)
         {
-            errorMessage = ex.Message;
+            if (ex.Message.Contains("already exists"))
+            {
+                errorMessage = "Username already taken. Please choose another.";
+            }
+            else
+            {
+                errorMessage = $"Error creating account: {ex.Message}";
+            }
         }
         finally
         {

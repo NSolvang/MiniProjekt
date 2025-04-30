@@ -6,13 +6,6 @@
 @inject ILoginService mLogin
 <h3>Mine Annoncer</h3>
 
-<div class="filter-buttons">
-    <button class="filter-btn" @onclick="ShowSold">Vis kun solgte</button>
-    <button class="filter-btn" @onclick="ShowActive">Vis kun aktive</button>
-    <button class="filter-btn" @onclick="ShowAll">Vis alle</button>
-</div>
-
-
 @if (annoncer == null)
 {
     <p><em>Loading...</em></p>
@@ -24,40 +17,32 @@ else if (annoncer.Length == 0)
 }
 else
 {
-    <table class="table">
-
-        <tbody>
+    <div class="annonce-grid">
         @foreach (var annonce in annoncer)
         {
-            <tr class="annonceRow">
-                <td>
-                    <h2>@annonce.Title - @annonce.Category</h2>
-                    <p><strong>Pris:</strong> @annonce.Price kr.</p>
-                </td>
-                <td>
-                    <p><strong>Beskrivelse:</strong> @annonce.Description</p>
-                </td>
-                <td>
-                    <span class="status @(annonce.Status == "Aktiv" ? "green" : annonce.Status == "Solgt" ? "red" : "")">
-                      @annonce.Status
-                     </span>
-                </td>
-                <td>Lokation: @annonce.Locations</td>
-                <td><img class="annonceImg" src="@annonce.Picture" width="150px" height="150px"/></td>
-                @if (annonce.Status == "Aktiv")
-                {
-                    <td>
-                        <button class="btn edit-btn" @onclick="() => EditAnnonce(annonce)">Rediger</button>
-                    </td>
-                    <td>
-                        <button class="btn delete-btn" @onclick="() => DeleteById(annonce)">Slet</button>
-                    </td>
-                }
-            </tr>
+            <div class="annonce-card">
+                <img class="annonceImg" src="@annonce.Picture" width="150px" height="150px"/>
+                <div class="annonce-header">
+                    <h3>@annonce.Title - @annonce.Category</h3>
+                </div>
+                <div class="annonce-price">@annonce.Price kr.</div>
+                <div class="annonce-description">@annonce.Description</div>
+                <div class="annonce-details">
+                    <span class="status">Status: @annonce.Status</span>
+                    <span class="location">Lokation: @annonce.Locations</span>
+                </div>
+                <div class="annonce-actions">
+                    <button class="btn-primary" @onclick="() => EditAnnonce(annonce)">Rediger</button>
+                    <button class="btn-primary" @onclick="() => DeleteById(annonce)">Slet</button>
+                </div>
+            </div>
+
         }
-        </tbody>
-    </table>
-    <button class="btn-primary" @onclick="NavigateToAddAnnoncePage">Tilføj Annonce</button>
+    </div>
+    <div style="text-align: right; margin-bottom: 20px;">
+        <button class="btn-primary" @onclick="NavigateToAddAnnoncePage">Tilføj Annonce</button>
+    </div>
+
 }
 
 @code {
@@ -67,13 +52,8 @@ else
     protected override async Task OnInitializedAsync()
     {
         User? currentUser = await mLogin.GetUserLoggedIn();
-
         if (currentUser == null)
-        {
             nav.NavigateTo("/LoginPage");
-            return; 
-        }
-
         await LoadAll();
     }
 
@@ -100,30 +80,5 @@ else
     {
         nav.NavigateTo($"/EditAnnoncePage/{annonce.Id}");
     }
-
-    private async Task ShowActive()
-    {
-        User? currentUser = await mLogin.GetUserLoggedIn();
-
-        annoncer = await mService.GetAll();
-        annoncer = annoncer.Where(a => a.Status == "Aktiv" && a.SellerId == currentUser!.Id ).ToArray();
-    }
     
-    private async Task ShowSold()
-    {
-        User? currentUser = await mLogin.GetUserLoggedIn();
-
-        annoncer = await mService.GetAll();
-        annoncer = annoncer.Where(a => a.Status == "Solgt" && a.SellerId == currentUser!.Id ).ToArray();
-    }
-
-
-    private async Task ShowAll()
-    {
-        User? currentUser = await mLogin.GetUserLoggedIn();
-
-        annoncer = await mService.GetAll();
-        annoncer = annoncer.Where(a => a.SellerId == currentUser!.Id ).ToArray();
-    }
-
 }
