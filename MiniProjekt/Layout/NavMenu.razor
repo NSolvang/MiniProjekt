@@ -1,4 +1,8 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using MiniProjekt.Service
+@inject ILoginService LoginService
+@inject NavigationManager navManager
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand me-5" href="">
             <i class="bi bi-recycle"></i> Vintage Sales
@@ -25,6 +29,11 @@
                         <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Mine køb
                     </NavLink>
                 </div>
+                <div class="nav-item px-3">
+                    <button class="nav-link btn btn-link text-white" @onclick="LogOut">
+                        <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Log ud
+                    </button>
+                </div>
             </nav>
         </div>
     </div>
@@ -33,10 +42,33 @@
 @code {
     private bool collapseNavMenu = false; // Sæt til false for altid at vise menuen
 
+    string username = "";
+    string password = "";
+    string errorText = "";
+    bool showError = false;
+
+    [Parameter]
+    public string? target { get; set; }   
+    
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    private async Task LogOut()
+    {
+        // Fjern brugerens loginstatus via din LoginService
+        await LoginService.LogOut(); // Du skal definere denne metode i LoginService
+
+        // Nulstil evt. lokale felter (valgfrit)
+        username = string.Empty;
+        password = string.Empty;
+
+        // Naviger til login-siden
+        navManager.NavigateTo("/LoginPage");
+    }
+
+
 }

@@ -4,9 +4,7 @@
 @inject IAnnonceService mService
 @inject NavigationManager nav
 @inject ILoginService mLogin
-
-
-<h3 class="user-annoncer-header">@UserName's Annoncer</h3>
+<h3>Mine Annoncer</h3>
 
 @if (annoncer == null)
 {
@@ -19,70 +17,53 @@ else if (annoncer.Length == 0)
 }
 else
 {
-    <div class="annonce-list-container">
+    <table class="table">
 
-        @if (annoncer == null)
+        <tbody>
+        @foreach (var annonce in annoncer)
         {
-            <p><em>Loading...</em></p>
-        }
-        else if (annoncer.Length == 0)
-        {
-            <p>Ingen annoncer fundet.</p>
-            <button class="btn btn-primary add-annonce-btn" @onclick="NavigateToAddAnnoncePage">Tilføj Annonce</button>
-        }
-        else
-        {
-            <div class="annonce-grid">
-                @foreach (var annonce in annoncer)
+            <tr class="annonceRow">
+                <td>
+                    <h2>@annonce.Title - @annonce.Category</h2>
+                    <p><strong>Pris:</strong> @annonce.Price kr.</p>
+                </td>
+                <td>
+                    <p><strong>Beskrivelse:</strong> @annonce.Description</p>
+                </td>
+                <td>
+                    <span class="status @(annonce.Status == "Aktiv" ? "green" : annonce.Status == "Solgt" ? "red" : "")">
+                      @annonce.Status
+                     </span>
+                </td>
+                <td>Lokation: @annonce.Locations</td>
+                <td><img class="annonceImg" src="@annonce.Picture" width="150px" height="150px"/></td>
+                @if (annonce.Status == "Aktiv")
                 {
-                    <div class="annonce-card">
-                        <div class="annonce-header">
-                            <h3>@annonce.Title</h3>
-                            <span class="category">@annonce.Category</span>
-                        </div>
-                        <img class="annonceImg" src="@annonce.Picture" alt="@annonce.Title" />
-                        <p class="annonce-description">@annonce.Description</p>
-                        <div class="annonce-details">
-                            <span class="annonce-price">@annonce.Price kr.</span>
-                            <span class="status @(annonce.Status == "Aktiv" ? "green" : annonce.Status == "Solgt" ? "red" : "")">
-                                @annonce.Status
-                            </span>
-                        </div>
-                        <p>Lokation: @annonce.Locations</p>
-                        @if (annonce.Status == "Aktiv")
-                        {
-                            <div class="annonce-actions">
-                                <button class="btn edit-btn" @onclick="() => EditAnnonce(annonce)">Rediger</button>
-                                <button class="btn delete-btn" @onclick="() => DeleteById(annonce)">Slet</button>
-                            </div>
-                        }
-                    </div>
+                    <td>
+                        <button class="btn edit-btn" @onclick="() => EditAnnonce(annonce)">Rediger</button>
+                    </td>
+                    <td>
+                        <button class="btn delete-btn" @onclick="() => DeleteById(annonce)">Slet</button>
+                    </td>
                 }
-            </div>
-            <button class="btn btn-primary add-annonce-btn" @onclick="NavigateToAddAnnoncePage">Tilføj Annonce</button>
+            </tr>
         }
-    </div>
+        </tbody>
+    </table>
+    <button class="btn-primary" @onclick="NavigateToAddAnnoncePage">Tilføj Annonce</button>
 }
 
 @code {
 
     private Annonce[]? annoncer;
-    private string UserName = "";
 
     protected override async Task OnInitializedAsync()
     {
         User? currentUser = await mLogin.GetUserLoggedIn();
         if (currentUser == null)
-        {
-            nav.NavigateTo("/LoginPage");
-        }
-        else
-        {
-            UserName = currentUser.Username; // Hent brugerens navn
-            await LoadAll();
-        }
+            nav.NavigateTo("/login");
+        await LoadAll();
     }
-    
 
     private async Task LoadAll()
     {

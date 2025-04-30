@@ -1,270 +1,160 @@
-/* Fælles styles for begge sider */
-.annonce-list-container {
+.product-list-container {
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.user-annoncer-header {
-    text-align: center;
-    width: 100%;
-}
-
-.h3 {
-    text-align: center;
-}
-
-.annonce-grid {
+.product-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
     padding: 20px;
 }
 
-.annonce-card {
+.product-card {
     background: #ffffff;
-    border: 1px solid #45c9f1;
-    border-radius: 12px;
+    border: 1px solid #1b6ec2;
+    border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 10);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.annonce-card:hover {
+.product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    border-color: #1b6ec2;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.annonce-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 15px;
-    min-height: 60px;
+.product-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #333;
 }
 
-.annonce-card h3 {
-    font-size: 1.3rem;
-    margin: 0;
-    color: #2c3e50;
-    line-height: 1.3;
-    flex-grow: 1;
-    padding-right: 10px;
-}
-
-.annonceImg {
-    width: 100%;
-    height: 250px; /* Større billeder */
-    object-fit: contain;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #f0f0f0;
-    background-color: #f9f9f9;
-    padding: 5px;
-}
-
-.annonce-description {
-    font-size: 0.95rem;
-    color: #555;
-    margin-bottom: 15px;
-    flex-grow: 1;
-    line-height: 1.5;
-}
-
-.annonce-price {
-    font-size: 1.3rem;
-    color: #28a745;
-    font-weight: bold;
-    margin: 10px 0;
-    text-align: center;
-}
-
-.annonce-details {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.85rem;
+.product-description {
+    font-size: 1rem;
     color: #666;
-    margin: 10px 0;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
+    margin-bottom: 10px;
 }
 
-.category {
-    background-color: #1b6ec2;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    white-space: nowrap;
+.product-price {
+    font-size: 1.2rem;
+    color: #28a745; /* Green color for price */
+    font-weight: bold;
 }
 
-/* Knapper */
-.btn {
+.product-stock {
+    font-size: 1rem;
+    color: #dc3545; /* Red color for stock */
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
     padding: 10px 20px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
+    font-size: 1.2rem;
 }
 
-.btn-primary {
-    background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-danger {
+    background-color: #dc3545;
     border: none;
-    padding: 12px 20px;
-    font-size: 1.1rem;
+    padding: 10px 20px;
+    font-size: 1rem;
     color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 20px;
-    align-self: stretch;
-    transition: all 0.3s ease;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.btn-primary:hover {
-    background-color: #155a9e;
+.btn-danger:hover {
+    background-color: #c82333;
 }
 
-.add-annonce-btn {
-    margin: 30px auto;
-    display: block;
-    width: 200px;
+td {
+    padding: 15px;
+    vertical-align: middle;
+    font-size: 14px;
 }
 
-/* MineAnnoncer specifikke styles */
+td h2 {
+    font-size: 20px;
+    margin: 0;
+    color: #333;
+}
+
+td p {
+    margin: 5px 0;
+    color: #555;
+}
+
+
+.annonceImg{
+    max-width:200px;
+    max-height: 200px;
+    border-radius: 20px;
+    background-color:lightgray;
+    object-fit: cover;
+    margin-top: 5px;
+}
+
 .status {
-    font-weight: 500;
-    padding: 3px 8px;
-    border-radius: 4px;
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
 }
 
 .status.green {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: green;
 }
 
 .status.red {
-    background-color: #f8d7da;
-    color: #721c24;
+    background-color: red;
 }
 
-.annonce-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
+.btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
 .edit-btn {
-    background-color: #ffc107;
-    color: #212529;
+    background-color: #007bff;
+    color: white;
 }
 
 .edit-btn:hover {
-    background-color: #e0a800;
+    background-color: #0056b3;
 }
 
 .delete-btn {
-    background-color: #dc3545;
+    background-color: red;
     color: white;
 }
 
 .delete-btn:hover {
-    background-color: #c82333;
+    background-color: darkred;
 }
 
-/* Filter section styles (til Marked siden) */
-.mb-3 {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 30px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 15px;
-}
-
-select, .form-control {
-    padding: 8px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    height: 38px;
-}
-
-label {
-    margin-right: 5px;
-    font-weight: 500;
-    font-size: 0.9rem;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: white;
-    padding: 8px 16px;
-    font-size: 0.9rem;
-}
-
-.btn-outline-secondary {
-    border: 1px solid #6c757d;
-    color: #6c757d;
-    padding: 8px 16px;
-    font-size: 0.9rem;
-}
-
-/* Search section (til Marked siden) */
-.search-section {
-    display: flex;
-    align-items: center;
+.annonceRow {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
     margin-bottom: 20px;
+    display: table-row;
 }
 
-.InputText {
-    padding: 8px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    margin-right: 10px;
-    font-size: 0.9rem;
-    width: 300px;
-    max-width: 100%;
+.annonceRow:hover {
+    background-color: #f9f9f9;
 }
 
-/* Responsive justeringer */
-@media (max-width: 992px) {
-    .annonce-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
 
-@media (max-width: 768px) {
-    .annonce-grid {
-        grid-template-columns: 1fr;
-    }
 
-    .mb-3 {
-        flex-direction: column;
-        align-items: flex-start;
-    }
 
-    select, .form-control {
-        width: 100%;
-        margin-right: 0;
-    }
-
-    .annonce-actions {
-        flex-direction: column;
-    }
-
-    .annonceImg {
-        height: 220px; /* Lidt mindre billeder på mobil */
-    }
-}

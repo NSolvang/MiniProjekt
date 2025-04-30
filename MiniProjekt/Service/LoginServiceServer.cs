@@ -1,5 +1,6 @@
 using Core;
 using System.Net.Http.Json;
+using MiniProjekt.Service;
 using Blazored.LocalStorage;
 
 namespace MiniProjekt.Service;
@@ -16,17 +17,25 @@ public class LoginServiceServer : ILoginService
         localStorage = localStorageService;
     }
 
-    public async Task<User?> GetUserLoggedIn() =>
-        await localStorage.GetItemAsync<User>("user");
+    public async Task<User?> GetUserLoggedIn()
+    {
+        var res = await localStorage.GetItemAsync<User>("user");
+        return res;
+    }
 
-    public async Task<bool> Login(string username, string password)
+    public async Task<bool> Login(string UserName, string Password)
     {
         try
         {
-            var response = await client.PostAsJsonAsync(
-                $"{serverUrl}api/User/login",
-                new { Username = username, Password = password }
-            );
+            // Create login request object
+            var loginRequest = new LoginRequest
+            {
+                Username = UserName,
+                Password = Password
+            };
+
+            // Send POST request with JSON body
+            var response = await client.PostAsJsonAsync($"{serverUrl}api/User/login", loginRequest);
 
             if (response.IsSuccessStatusCode)
             {
@@ -37,18 +46,26 @@ public class LoginServiceServer : ILoginService
                     return true;
                 }
             }
+
             return false;
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine($"Login error: {ex.Message}");
             return false;
         }
     }
 
     public async Task AddUser(User user)
     {
-        
-        await client.PostAsJsonAsync($"{serverUrl}api/User/register", user);
+        await client.PostAsJsonAsync($"{serverUrl}api/User", user);
     }
+    
+}
 
+
+public class LoginRequest
+{
+    public string Username { get; set; }
+    public string Password { get; set; }
 }

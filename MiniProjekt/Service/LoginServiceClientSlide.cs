@@ -38,4 +38,9 @@ public class LoginServiceClientSlide : ILoginService
     {
         await localStorage.SetItemAsync("user", user);
     }
+    
+    public async Task LogOut()
+    {
+        await localStorage.RemoveItemAsync("user");
+    }
 }
