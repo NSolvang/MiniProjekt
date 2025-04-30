@@ -1,210 +1,457 @@
-  /* ===== VINTAGE HEADER STYLES ===== */
-.Forside {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 20px;
-    background: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
-    position: relative;
-    overflow: hidden;
+/* ===== GLOBAL STYLES ===== */
+:root {
+    --primary: #333333; /* Dark gray */
+    --secondary: #666666; /* Medium gray */
+    --accent: #999999; /* Light gray */
+    --light-bg: #f8f8f8; /* Off-white background */
+    --text-dark: #222222;
+    --text-light: #ffffff;
+    --border-color: #014f9a;
 }
 
-.Forside::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 60%;
-    background: #f5e8d0;
-    z-index: -1;
-    transform: skewY(-3deg);
-    transform-origin: top left;
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--light-bg);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* ===== HERO SECTION ===== */
+.Forside {
+    position: relative;
+    padding: 4rem 2rem;
+    background: var(--light-bg);
+    text-align: center;
+    overflow: hidden;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .Forside h1 {
-    font-size: 4rem;
-    font-weight: 700;
-    font-family: 'Playfair Display', serif;
-    color: #0e0e0e;
-    margin: 0 0 30px 0;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    letter-spacing: 1px;
+    font-size: 3.5rem;
+    font-weight: 300;
+    letter-spacing: -1px;
+    color: var(--text-dark);
+    margin: 0 0 1.5rem;
     position: relative;
-    display: inline-block;
-}
-
-.Forside h1::after {
-    content: "";
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 3px;
-    background: #8b7355;
 }
 
 .Forside img {
     width: 100%;
     max-width: 800px;
     height: auto;
-    border-radius: 8px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-    border: 8px solid white;
-    filter: sepia(0.1) contrast(1.05) brightness(0.95);
-    transition: transform 0.3s ease;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
 }
 
 .Forside img:hover {
-    transform: scale(1.02);
-    filter: sepia(0.2) contrast(1.1) brightness(1);
+    transform: scale(1.01);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
 }
 
-/* ===== REST OF YOUR EXISTING STYLES ===== */
+/* ===== CATEGORY CARDS ===== */
 .hero-section {
-    display: flex;
-    min-height: 100vh;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffffff;
-    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+    text-align: center;
 }
 
-/* ... (keep all your existing card styles) ... */
-
-/* ===== MOBILE RESPONSIVENESS ===== */
-@media (max-width: 768px) {
-    .Forside h1 {
-        font-size: 2.5rem;
-    }
-
-    .Forside img {
-        max-width: 100%;
-        border-width: 4px;
-    }
-
-}
-
-
-/* ===== MAIN STYLES ===== */
-.hero-section {
-    display: flex;
-    min-height: 100vh;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffffff;
-    padding: 40px 20px;
+.hero-section h1 {
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+    position: relative;
 }
 
 .card-container {
     display: flex;
-    gap: 30px;
-    width: 100%;
-    max-width: 1200px;
     justify-content: center;
+    gap: 2rem;
     flex-wrap: wrap;
+    margin-top: 1rem;
 }
 
 .card {
     position: relative;
-    list-style: none;
-    width: 220px;
-    transition: transform 0.3s ease, filter 0.3s ease;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 20px; /* Added to parent card */
-    overflow: hidden; /* Ensures child elements respect border-radius */
+    width: 260px;
+    height: 340px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    background: white;
+    border: 1px solid var(--border-color);
 }
 
-.card:before {
-    content: "";
-    display: block;
-    padding-bottom: 150%;
-    width: 100%;
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    border-color: var(--accent);
 }
 
 .card-background {
     position: absolute;
-    bottom: 0;
-    right: 0;
-    left: 0;
     top: 0;
-    border-radius: 20px; /* Kept for backup */
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
-    filter: brightness(0.9) saturate(1) contrast(1);
-    transition: 0.3s ease;
-    will-change: transform;
-}
-
-/* ===== HOVER EFFECTS ===== */
-.card-container:hover .card:not(:hover) {
-    transform: scale(0.95);
-}
-
-.card-container:hover .card:not(:hover) .card-background {
-    filter: brightness(0.6) saturate(0.8) contrast(1.2) blur(2px);
-}
-
-.card:hover {
-    transform: scale(1.05) translateY(-10px);
-    z-index: 2;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    transition: transform 0.4s ease;
+    filter: brightness(0.95);
 }
 
 .card:hover .card-background {
-    filter: brightness(1) saturate(1.1) contrast(1.1);
+    transform: scale(1.05);
 }
 
-/* ===== CARD CONTENT ===== */
 .content {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
     color: white;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0.9;
-    transition: 0.3s ease;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+    z-index: 2;
 }
 
-.card:hover .content {
-    opacity: 1;
-    transform: translateY(-5px);
+.card-heading {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 400;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
-/* ===== "THANKS" MESSAGE ===== */
-.thanks-message {
+/* ===== RANDOM LISTINGS ===== */
+.random-listings {
+    max-width: 1400px;
+    margin: 0 auto 6rem;
+    padding: 0 2rem;
+}
+
+.random-listings h2 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 3rem;
     text-align: center;
-    margin-top: 40px;
-    font-family: 'Arial', sans-serif;
-    color: #333;
-    font-size: 18px;
-    animation: fadeIn 1s ease-in-out;
+    position: relative;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.random-listings h2::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: var(--accent);
 }
 
-/* ===== MOBILE RESPONSIVENESS ===== */
+.listing-scroller-container {
+    position: relative;
+    padding: 1rem 0;
+}
+
+.listing-scroller-container::before,
+.listing-scroller-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.listing-scroller-container::before {
+    left: 0;
+    background: linear-gradient(to right, var(--light-bg) 0%, transparent 100%);
+}
+
+.listing-scroller-container::after {
+    right: 0;
+    background: linear-gradient(to left, var(--light-bg) 0%, transparent 100%);
+}
+
+.listing-scroller {
+    display: flex;
+    gap: 1.5rem;
+    animation: scroll 40s linear infinite;
+    width: max-content;
+    padding: 1rem 0;
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-10%); }
+}
+
+/* ===== RANDOM LISTINGS ===== */
+.random-listings {
+    max-width: 1400px;
+    margin: 0 auto 6rem;
+    padding: 0 2rem;
+    overflow: hidden; /* Tilføj denne linje */
+}
+
+.listing-scroller-container {
+    position: relative;
+    padding: 1rem 0;
+    width: 100%;
+    overflow: hidden; /* Vigtigt - forhindrer manuel scrolling */
+}
+
+.listing-scroller {
+    display: flex;
+    gap: 1.5rem;
+    animation: scroll 40s linear infinite;
+    width: max-content;
+    padding: 1rem 0;
+    user-select: none; /* Forhindrer markering af tekst under scroll */
+    pointer-events: none; /* Forhindrer interaktion under scroll */
+}
+
+/* Gør indholdet interaktivt igen når musen er over containeren */
+.listing-scroller-container:hover .listing-scroller {
+    pointer-events: auto;
+    animation-play-state: paused;
+}
+
+/* Resten af dine eksisterende styles... */
+.annonce-card {
+    flex: 0 0 320px;
+    /* ... */
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
+    .annonce-card {
+        flex: 0 0 240px;
+    }
+}
+
+.annonce-card {
+    flex: 0 0 320px;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.annonce-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.annonce-img-container {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+}
+
+.annonceImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.annonce-card:hover .annonceImg {
+    transform: scale(1.1);
+}
+
+.annonce-content {
+    padding: 1.5rem;
+    position: relative;
+}
+
+.annonce-header {
+    margin-bottom: 1rem;
+}
+
+.annonce-header h3 {
+    font-size: 1.3rem;
+    margin: 0 0 0.5rem;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.category {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.annonce-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0.5rem 0;
+}
+
+.annonce-description {
+    font-size: 0.95rem;
+    color: var(--secondary);
+    margin: 0.5rem 0 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.annonce-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.status {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status.til-salgs {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+}
+
+.status.reserveret {
+    background-color: rgba(241, 196, 15, 0.1);
+    color: #f1c40f;
+}
+
+.status.solgt {
+    background-color: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+}
+
+.location {
+    display: flex;
+    align-items: center;
+    color: var(--secondary);
+    font-size: 0.9rem;
+}
+
+.location::before {
+    content: "📍";
+    margin-right: 0.3rem;
+}
+
+/* ===== LOADING STATE ===== */
+.loading-text {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--secondary);
+    padding: 2rem;
+}
+
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+@media (max-width: 1200px) {
+    .Forside h1 {
+        font-size: 3.5rem;
+    }
+
+    .card {
+        width: 240px;
+        height: 320px;
+    }
+
+    .annonce-card {
+        flex: 0 0 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .Forside {
+        padding: 3rem 1.5rem;
+    }
+
+    .Forside h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-section h1,
+    .random-listings h2 {
+        font-size: 2rem;
+    }
+
+    .card-container {
+        gap: 1.5rem;
+    }
+
+    .card {
+        width: 200px;
+        height: 280px;
+    }
+
+    .content {
+        padding: 1.5rem;
+    }
+
+    .card-heading {
+        font-size: 1.5rem;
+    }
+
+    .annonce-card {
+        flex: 0 0 240px;
+    }
+
+    .annonce-img-container {
+        height: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    .Forside h1 {
+        font-size: 2rem;
+    }
+
+    .Forside img {
+        border-width: 8px;
+    }
+
     .card {
         width: 160px;
-        border-radius: 16px; /* Slightly smaller radius for mobile */
+        height: 240px;
     }
-    .card-background {
-        border-radius: 16px; /* Match parent */
+
+    .content {
+        padding: 1rem;
     }
-    .card-container {
-        gap: 15px;
+
+    .card-heading {
+        font-size: 1.3rem;
     }
-    .card:hover {
-        transform: scale(1.03) translateY(-5px);
+
+    .random-listings h2 {
+        font-size: 1.8rem;
     }
-}  
+
+    .listing-scroller {
+        gap: 1rem;
+    }
+
+    .annonce-card {
+        flex: 0 0 200px;
+    }
+}

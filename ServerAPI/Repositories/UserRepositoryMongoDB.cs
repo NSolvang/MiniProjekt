@@ -9,34 +9,21 @@ namespace ServerAPI.Repositories
 
         public UserRepositoryMongoDb()
         {
-            // Local MongoDB connection - samme som ProductRepository
-            var mongoUri = "mongodb+srv://niko6041:1234@cluster.codevrj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster";
-            
-            try
-            {
-                var client = new MongoClient(mongoUri);
-                var dbName = "markedDatabase"; // Samme database som Products
-                var collectionName = "user"; // Andet collection navn
-
-                _userCollection = client.GetDatabase(dbName)
-                   .GetCollection<User>(collectionName);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Database connection error: {e.Message}");
-                throw;
-            }
+            var client = new MongoClient("mongodb+srv://niko6041:1234@cluster.codevrj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster");
+            _userCollection = client.GetDatabase("markedDatabase")
+                .GetCollection<User>("user");
         }
 
         public void AddUser(User user)
         {
-            // Tjek om brugernavnet allerede findes
+            // Check if username already exists
             if (_userCollection.Find(u => u.Username == user.Username).Any())
                 throw new Exception("Username already exists");
 
-            // Generer nyt ID hvis nødvendigt
+            // Generate new ID if needed
             if (user.Id == 0)
                 user.Id = GenerateNewId();
+
 
             _userCollection.InsertOne(user);
         }
@@ -55,11 +42,9 @@ namespace ServerAPI.Repositories
 
         private int GenerateNewId()
         {
-            // Hvis collection er tom, start med 1
             if (_userCollection.CountDocuments(FilterDefinition<User>.Empty) == 0)
                 return 1;
 
-            // Find det højeste ID og increment
             return _userCollection
                 .Find(FilterDefinition<User>.Empty)
                 .SortByDescending(u => u.Id)
@@ -67,4 +52,4 @@ namespace ServerAPI.Repositories
                 .FirstOrDefault()?.Id + 1 ?? 1;
         }
     }
-}                                                      
+}

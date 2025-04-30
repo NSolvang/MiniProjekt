@@ -1,6 +1,6 @@
 @page "/LoginPage/{target:alpha?}"
 @using MiniProjekt.Service
-@inject NavigationManager navManger
+@inject NavigationManager navManager
 @inject ILoginService LoginService
 
 <link href="css/Login.css" rel="stylesheet" />
@@ -35,8 +35,16 @@
             <a href="#" class="forgot-password">Forgot password?</a>
         </div>
 
-        <button class="login-button" @onclick="OnClickLogin">
-            Login <i class="fas fa-arrow-right"></i>
+        <button class="login-button" @onclick="OnClickLogin" disabled="@isProcessing">
+            @if (isProcessing)
+            {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span>Logging in...</span>
+            }
+            else
+            {
+                <span>Login <i class="fas fa-arrow-right"></i></span>
+            }
         </button>
 
         @if (showError)
@@ -57,34 +65,58 @@
     string password = "";
     string errorText = "";
     bool showError = false;
+    bool isProcessing = false;
     
     [Parameter]
     public string? target { get; set; }   
+
+    protected override void OnInitialized()
+    {
+        // Default to Marked if target is null or empty
+        if (string.IsNullOrEmpty(target))
+        {
+            target = "Marked";
+        }
+    }
 
     private async Task OnClickLogin()
     {
         // Reset error state
         showError = false;
+        isProcessing = true;
         
-        // Validate empty fields
-        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        try
         {
-            errorText = "Please enter both username and password";
-            showError = true;
-            return;
-        }
+            // Validate empty fields
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                errorText = "Please enter both username and password";
+                showError = true;
+                isProcessing = false;
+                return;
+            }
 
-        var success = await LoginService.Login(username, password);
+            var success = await LoginService.Login(username, password);
 
-        if (!success)
+            if (!success)
+            {
+                errorText = "Invalid username or password";
+                showError = true;
+            }
+            else
+            {
+               
+                navManager.NavigateTo(!string.IsNullOrEmpty(target) ? target : "/Marked");
+            }
+        }
+        catch (Exception ex)
         {
-            errorText = "Invalid username or password";
+            errorText = "Login error: " + ex.Message;
             showError = true;
         }
-        else
+        finally
         {
-            // Use the target parameter if provided, otherwise navigate to default
-            navManger.NavigateTo(!string.IsNullOrEmpty(target) ? target : "/Marked");
+            isProcessing = false;
         }
     }
 }

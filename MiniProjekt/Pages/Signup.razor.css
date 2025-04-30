@@ -4,13 +4,14 @@
     align-items: center;
     min-height: 100vh;
     background: #ffffff;
-    margin: 0; /* Ensure no default margin */
-    padding: 20px; /* Add some padding for mobile */
-    box-sizing: border-box; /* Include padding in height calculation */
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 }
 
 .signup-card {
-    background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);
+    background: linear-gradient(135deg, #14bff4 0%, #4a00e0 100%); /* Samme gradient som login */
     border: none;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -21,11 +22,10 @@
     position: relative;
     overflow: hidden;
     color: white;
-    margin: 0 auto; /* Additional centering for the card itself */
+    margin: 0 auto;
 }
 
-
-/* Multi-layer shimmer effect (same as login) */
+/* Multi-layer shimmer effect - nøjagtig kopi fra login */
 .signup-card::before,
 .signup-card::after {
     content: '';
@@ -53,7 +53,16 @@
     transform: rotate(-15deg);
 }
 
-/* Continuous animation with multiple directions */
+@keyframes shimmer-primary {
+    0% { transform: rotate(30deg) translate(-30%, -30%); }
+    100% { transform: rotate(30deg) translate(70%, 70%); }
+}
+
+@keyframes shimmer-secondary {
+    0% { transform: rotate(-15deg) translate(-40%, -40%); }
+    100% { transform: rotate(-15deg) translate(60%, 60%); }
+}
+
 .signup-card::before {
     animation: shimmer-primary 8s infinite linear;
 }
@@ -62,7 +71,6 @@
     animation: shimmer-secondary 12s infinite linear;
 }
 
-/* Hover effects */
 .signup-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
@@ -73,7 +81,7 @@
     animation-duration: 6s, 9s;
 }
 
-/* Header styles */
+/* Header styles - matcher login */
 .signup-header {
     text-align: center;
     margin-bottom: 30px;
@@ -93,7 +101,7 @@
     font-size: 14px;
 }
 
-/* Form styles (same as login) */
+/* Form styles - nøjagtig kopi fra login */
 .form-group {
     margin-bottom: 20px;
     position: relative;
@@ -138,18 +146,20 @@
 .form-control:focus {
     outline: none;
     border-color: white;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgb(255, 255, 255); /* Hvid baggrund som login */
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    color: #333; /* Mørk tekst ved focus som login */
 }
 
 .password-hint {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.7);
     margin-top: 5px;
+    display: block;
 }
 
-/* Make the Create button identical to login-button */
-.Create {
+/* Button styles - matcher login-knappen */
+.signup-button {
     width: 100%;
     padding: 12px;
     background: white;
@@ -162,10 +172,8 @@
     transition: all 0.3s ease;
     position: relative;
     z-index: 1;
-    margin-top: 20px; /* Match login form spacing */
-    letter-spacing: 0.5px; /* Add if login button has this */
-    text-transform: none; /* Ensure no text transformation */
 }
+
 
 .Create:hover {
     background: rgba(255, 255, 255, 0.9);
@@ -175,7 +183,7 @@
 
 .Create:active {
     transform: translateY(0);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Message styles */
@@ -210,7 +218,7 @@
     margin-right: 8px;
 }
 
-/* Link styles */
+/* Link styles - matcher login */
 .signup-link {
     text-align: center;
     margin-top: 25px;
@@ -228,4 +236,19 @@
 
 .signup-link a:hover {
     text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .signup-card {
+        padding: 30px 25px;
+    }
+
+    .signup-header h1 {
+        font-size: 22px;
+    }
+
+    .form-control {
+        padding: 10px 15px 10px 40px;
+    }
 }
